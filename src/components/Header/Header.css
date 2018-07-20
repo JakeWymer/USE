@@ -1,0 +1,31 @@
+header {
+    height: 10vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 60px;
+    background-color: #556874;
+    color: white;
+    font-size: 20px;
+}
+
+.logo {
+    font-size: 40px;
+    font-family: "Roboto";
+}
+
+nav {
+    justify-content: center;
+    width: 30%;
+    display: none;
+}
+
+nav > * {
+    margin: 0 7%;
+}
+
+@media(min-width: 768px) {
+    nav {
+        display: flex;
+    }
+}

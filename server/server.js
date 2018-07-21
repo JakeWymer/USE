@@ -15,18 +15,21 @@ const port = process.env.PORT || 5000;
 massive(process.env.DB_CONNECTION_STRING)
   .then(db => {
     app.set('db', db);
-    app.get('db').create_users_table()
-      .then(() => console.log('CREATED USERS TABLE'))
+    app.get('db').create_schema()
+      .then(() => console.log('CREATED SCHEMA'))
       .catch(err => console.log(err));
   })
   .catch(err => console.log(err));
 
 app.use(json());
 
-app.use( session({
+app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 60 * 1000
+  }
 }));
 
 app.use( passport.initialize() );
@@ -34,7 +37,6 @@ app.use( passport.session());
 passport.use(strategy);
 
 passport.serializeUser((user, done) => {
-  console.log(user);
   app.get('db').users.get_user_by_authid(user.id)
     .then(response => {
       if(!response[0]) {
@@ -55,6 +57,9 @@ passport.deserializeUser((obj, done) => {
 app.get('/login', userController.login);
 app.get('/logout', userController.logout);
 app.get('/api/currentuser', userController.getUser);
+app.post('/api/friends', userController.addFriend);
+app.get('/api/friends/:id', userController.getFriends);
+app.get('/api/users', userController.getUsers);
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`);

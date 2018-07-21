@@ -19,8 +19,34 @@ const getUser = (req, res) => {
   }
 }
 
+const addFriend = (req, res) => {
+  let {user_one_id, user_two_id} = req.body;
+  req.app.get('db').users.add_friend([user_one_id, user_two_id])
+    .then(() => {
+      req.app.get('db').users.get_friends(user_two_id)
+        .then(friends => res.status(200).send(friends))
+        .catch(err =>  res.send(err));
+    })
+    .catch(err => res.sendStatus(500));
+}
+
+const getFriends = (req, res) => {
+  req.app.get('db').users.get_friends(parseInt(req.params.id))
+    .then(friends => res.status(200).send(friends))
+    .catch(err =>  res.send(err));
+}
+
+const getUsers = (req, res) => {
+  req.app.get('db').users.get_users()
+    .then(users => res.status(200).send(users))
+    .catch(err =>  res.send(err));
+}
+
 module.exports = {
   login,
   logout,
-  getUser
+  getUser,
+  addFriend,
+  getFriends,
+  getUsers
 }

@@ -1,9 +1,9 @@
 header {
     height: 10vh;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    padding: 0 60px;
+    padding: 0 80px;
     background-color: var(--dark-blue);
     color: white;
     font-size: 20px;
@@ -12,20 +12,35 @@ header {
 .logo {
     font-size: 40px;
     font-family: "Roboto";
+    display: none;
 }
 
 nav {
     justify-content: center;
-    width: 30%;
     display: none;
+    white-space:nowrap;
 }
 
 nav > * {
-    margin: 0 7%;
+    margin: 0 10%;
+}
+
+input {
+    font-size: 20px;
+    border-radius: 5px;
+    border: none;
 }
 
 @media(min-width: 768px) {
+    header {
+        justify-content: space-between;
+    }
+
     nav {
         display: flex;
+    }
+
+    .logo {
+        display: block;
     }
 }

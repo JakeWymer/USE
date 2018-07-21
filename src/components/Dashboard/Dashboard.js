@@ -4,15 +4,17 @@ import {connect} from 'react-redux';
 import Loading from 'react-loading-components';
 import {Redirect} from 'react-router-dom';
 
-import {setCurrentUser} from '../../ducks/userReducer'
+import {setCurrentUser, setFriends} from '../../ducks/userReducer'
 import './Dashboard.css';
+import FriendListItem from '../FriendListItem/FriendListItem';
 
 class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
-      redirect: false
+      redirect: false,
+      friends: []
     };
   }
   
@@ -22,8 +24,12 @@ class Dashboard extends Component {
       this.setState({redirect: true});
     } else {
       this.props.setCurrentUser(res.data);
-      console.log(this.props);
-      this.setState({loading: false});
+      axios.get(`/api/friends/${this.props.user.currentUser.users_id}`)
+        .then((friends) => {
+          this.props.setFriends(friends.data);
+          this.setState({loading: false});
+        })
+        .catch(err => console.log(err));
     }
   }
 
@@ -36,9 +42,13 @@ class Dashboard extends Component {
       return <Loading type='tail_spin' width={100} height={100} fill='#f44242' />
     }
 
+    let friends = this.props.user.friends.map(friend => {
+      return <FriendListItem key={friend.auth_id} friend={friend}/>
+    });
+
     return (
       <div>
-        <h1>Dashboard</h1>
+        {friends}
       </div>
     );
   }
@@ -46,4 +56,4 @@ class Dashboard extends Component {
 
 const mapStateToProps = state => state;
 
-export default connect(mapStateToProps, {setCurrentUser})(Dashboard);
+export default connect(mapStateToProps, {setCurrentUser, setFriends})(Dashboard);

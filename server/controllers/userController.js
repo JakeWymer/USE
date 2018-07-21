@@ -5,6 +5,22 @@ const login = passport.authenticate('auth0', {
   failureRedirect: 'http://localhost:3000/#/', connection: 'google-oauth2'
 });
 
+const logout = (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('http://localhost:3000/#/');
+  });
+};
+
+const getUser = (req, res) => {
+  if(req.user) {
+    res.status(200).send(req.user);
+  } else {
+    res.status(500).send({message: "Please log in to continue"});
+  }
+}
+
 module.exports = {
-  login
+  login,
+  logout,
+  getUser
 }

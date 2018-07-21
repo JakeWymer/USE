@@ -53,6 +53,8 @@ passport.deserializeUser((obj, done) => {
 });
 
 app.get('/login', userController.login);
+app.get('/logout', userController.logout);
+app.get('/api/currentuser', userController.getUser);
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`);

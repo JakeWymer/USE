@@ -15,7 +15,7 @@ const getUser = (req, res) => {
   if(req.user) {
     res.status(200).send(req.user);
   } else {
-    res.status(500).send({message: "Please log in to continue"});
+    res.send({message: "Please log in to continue"});
   }
 }
 

@@ -9,7 +9,7 @@ const Home = () => {
       <section id="hero">
         <h1>U.S.E</h1>
         <h2>Ultimate Songwriting Experience</h2>
-        <button className="sign-up-btn">Sign Up</button>
+        <button className="sign-up-btn"><a href={process.env.REACT_APP_LOGIN_URL}>Sign Up</a></button>
         <img src={musicImage} alt=""/>
       </section>
       <section id="features">

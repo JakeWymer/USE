@@ -6,6 +6,8 @@ const massive = require('massive');
 require('dotenv').config();
 
 const userController = require('./controllers/userController');
+const songsController = require('./controllers/songsController');
+
 const strategy = require(`${__dirname}/strategy.js`);
 
 const app = express();
@@ -28,7 +30,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: 60 * 1000
+    maxAge: 60 * 60 * 1000
   }
 }));
 
@@ -60,6 +62,9 @@ app.get('/api/currentuser', userController.getUser);
 app.post('/api/friends', userController.addFriend);
 app.get('/api/friends/:id', userController.getFriends);
 app.get('/api/users', userController.getUsers);
+
+app.post('/api/songs', songsController.addSong);
+app.get('/api/songs/:id', songsController.getSongs);
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`);

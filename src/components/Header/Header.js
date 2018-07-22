@@ -17,7 +17,7 @@ class Header extends Component {
         </nav>
       );
       input = (
-        <input type="text"/>
+        <SearchBar />
       );
     } else {
       headerContent =(
@@ -32,7 +32,7 @@ class Header extends Component {
         <div className="logo">
           <p>U.S.E</p>
         </div>
-        <SearchBar />
+        {input}
         {headerContent}
       </header>
     );

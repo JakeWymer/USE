@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {addFriend} from '../../ducks/userReducer';
 
 const SearchItem = (props) => {
   let friend = props.user.friends.find(friend => friend.users_id === props.person.users_id);
@@ -22,4 +23,4 @@ const SearchItem = (props) => {
 
 const mapStateToProps = state => state;
 
-export default connect(mapStateToProps, null)(SearchItem);
+export default connect(mapStateToProps, {addFriend})(SearchItem);

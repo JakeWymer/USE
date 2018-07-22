@@ -1,0 +1,56 @@
+.dashboard {
+    display: flex;
+    min-height: 80vh;
+}
+
+.friends-panel {
+    flex: 1;
+    border: 1px solid black;
+}
+
+.songs-panel {
+    flex: 3;
+    border: 1px solid black;
+    padding-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: scroll;
+}
+
+.songs-panel form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.songs-panel input {
+    border: 1px solid #d6d6d6;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.songs-panel button {
+    font-size: 14px;
+    padding: 8px;
+    background-color: var(--orange);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    margin-left: 5px;
+}
+
+.song {
+    width: 50%;
+    min-height: 20%;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.loading-wrap {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

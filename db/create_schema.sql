@@ -11,3 +11,11 @@ CREATE TABLE IF NOT EXISTS friends(
     user_two_id INTEGER REFERENCES users(users_id),
     status VARCHAR(20)
 );
+
+CREATE TABLE IF NOT EXISTS songs(
+    songs_id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(users_id),
+    name VARCHAR(50),
+    music_key VARCHAR(5),
+    bpm INTEGER
+);

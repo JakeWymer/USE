@@ -43,7 +43,6 @@ export default function userReducer(state = initialState, action) {
         friends: action.payload
       }
     case `${ADD_FRIEND}_FULFILLED`:
-      console.log(action.payload);
       return {
         ...state,
         friends: action.payload.data

@@ -5,8 +5,9 @@ import Loading from 'react-loading-components';
 import {Redirect} from 'react-router-dom';
 
 import {setCurrentUser, setFriends} from '../../ducks/userReducer'
-import './Dashboard.css';
 import FriendListItem from '../FriendListItem/FriendListItem';
+import './Dashboard.css';
+import SongItem from '../SongItem/SongItem';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -14,8 +15,13 @@ class Dashboard extends Component {
     this.state = {
       loading: true,
       redirect: false,
-      friends: []
+      friends: [],
+      songInput: '',
+      songs: []
     };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
   
   async componentDidMount() {
@@ -27,10 +33,24 @@ class Dashboard extends Component {
       axios.get(`/api/friends/${this.props.user.currentUser.users_id}`)
         .then((friends) => {
           this.props.setFriends(friends.data);
-          this.setState({loading: false});
         })
         .catch(err => console.log(err));
+      axios.get(`/api/songs/${this.props.user.currentUser.users_id}`)
+        .then(songs => {
+          this.setState({loading: false, songs: songs.data});
+        })
+        .catch(err => console.log(err))
     }
+  }
+
+  async handleSubmit(e) {
+    e.preventDefault();
+    let songs = await axios.post('/api/songs', {name: this.state.songInput, users_id: this.props.user.currentUser.users_id});
+    this.setState({songs: songs.data, songInput: ''});
+  }
+
+  handleChange(e) {
+    this.setState({[e.target.name]: e.target.value});
   }
 
   render() {
@@ -39,16 +59,37 @@ class Dashboard extends Component {
     }
 
     if(this.state.loading) {
-      return <Loading type='tail_spin' width={100} height={100} fill='#f44242' />
+      return(
+        <div className="loading-wrap">
+          <Loading type='tail_spin' width={100} height={100} fill='#f44242' />
+        </div>
+      );
     }
 
     let friends = this.props.user.friends.map(friend => {
       return <FriendListItem key={friend.auth_id} friend={friend}/>
     });
 
+    let songs = this.state.songs.map(song => {
+      return <SongItem key={song.songs_id} song={song}/>
+    });
+
     return (
-      <div>
-        {friends}
+      <div className="dashboard">
+        <div className="friends-panel">
+          {friends}
+        </div>
+        <div className="songs-panel">
+          <form onSubmit={this.handleSubmit}>
+            <input 
+              type="text"
+              name="songInput"
+              value={this.state.songInput}
+              onChange={this.handleChange}/>
+            <button>Create Song</button>
+          </form>
+          {songs}
+        </div>
       </div>
     );
   }

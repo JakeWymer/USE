@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import {connect} from 'react-redux';
-import {addFriend} from '../../ducks/userReducer';
 import SearchItem from '../SearchItem/SearchItem';
 
 class SearchBar extends Component {
@@ -15,7 +14,6 @@ class SearchBar extends Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.addFriend = this.addFriend.bind(this);
   }
   
   async componentDidMount() {
@@ -28,10 +26,6 @@ class SearchBar extends Component {
       return user.name.toLowerCase().includes(e.target.value);
     });
     this.setState({[e.target.name]: e.target.value, filteredUsers});
-  }
-
-  addFriend(id) {
-    this.props.addFriend(id, this.props.user.currentUser.users_id);
   }
 
   render() {
@@ -68,4 +62,4 @@ class SearchBar extends Component {
 
 const mapStateToProps = state => state;
 
-export default connect(mapStateToProps, {addFriend})(SearchBar);
+export default connect(mapStateToProps, null)(SearchBar);

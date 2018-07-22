@@ -42,11 +42,33 @@ const getUsers = (req, res) => {
     .catch(err =>  res.send(err));
 }
 
+const deleteFriend = (req, res) => {
+  req.app.get('db').users.delete_friend(req.params.friends_id)
+    .then(() => {
+      req.app.get('db').users.get_friends(req.params.current_id)
+        .then(friends => res.status(200).send(friends))
+        .catch(err =>  res.send(err));
+    })
+    .catch(err => res.sendStatus(500));
+}
+
+const acceptFriend = (req, res) => {
+  req.app.get('db').users.accept_friend(req.params.friends_id)
+    .then(() => {
+      req.app.get('db').users.get_friends(req.params.current_id)
+        .then(friends => res.status(200).send(friends))
+        .catch(err =>  res.send(err));
+    })
+    .catch(err => res.sendStatus(500));
+}
+
 module.exports = {
   login,
   logout,
   getUser,
   addFriend,
   getFriends,
-  getUsers
+  getUsers,
+  deleteFriend,
+  acceptFriend
 }

@@ -30,7 +30,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: 60 * 60 * 1000
+    maxAge: 2 * 7 * 60 * 60 * 1000
   }
 }));
 
@@ -62,6 +62,8 @@ app.get('/api/currentuser', userController.getUser);
 app.post('/api/friends', userController.addFriend);
 app.get('/api/friends/:id', userController.getFriends);
 app.get('/api/users', userController.getUsers);
+app.delete('/api/friends/:current_id/:friends_id', userController.deleteFriend);
+app.put('/api/friends/:current_id/:friends_id', userController.acceptFriend);
 
 app.post('/api/songs', songsController.addSong);
 app.get('/api/songs/:id', songsController.getSongs);

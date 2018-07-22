@@ -1,0 +1,20 @@
+.friend {
+    display: flex;
+    padding: 20px;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--light-grey);
+}
+
+.friend img{
+    width: 75px;
+    border-radius: 50%;
+}
+
+.friend h2 {
+    font-size: 22px;
+}
+
+.friend i {
+    color: var(--light-blue);
+}

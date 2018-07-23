@@ -6,6 +6,7 @@ import Loading from 'react-loading-components';
 import {setCurrentUser, setFriends} from '../../ducks/userReducer'
 import FriendListItem from '../FriendListItem/FriendListItem';
 import './SongDetail.css';
+import SectionItem from '../Sectionitem/SectionItem';
 
 class SongDetail extends Component {
   constructor(props) {
@@ -30,8 +31,12 @@ class SongDetail extends Component {
 
   async handleSubmit(e) {
     e.preventDefault();
-    let songs = await axios.post('/api/songs', {name: this.state.songInput, users_id: this.props.user.currentUser.users_id});
-    this.setState({songs: songs.data, sectionInput: ''});
+    await axios.post('/api/sections', {songs_id: this.state.song.songs_id, section_name: this.state.sectionInput})
+      .then(() => {
+        axios.get(`/api/song/${this.props.match.params.id}`)
+          .then(res => this.setState({song: res.data[0], sectionInput: ''}))
+          .catch(err => console.log(err)); 
+      });
   }
 
   handleChange(e) {
@@ -75,6 +80,10 @@ class SongDetail extends Component {
       return <FriendListItem key={friend.auth_id} friend={friend} page="detail" addCollaborator={this.addCollaborator}/>
     });
 
+    let sections = this.state.song.sections.map(section => {
+      return <SectionItem key={section.sections_id} section={section}/>
+    });
+
     return (
       <div className="song-detail">
         <div className="friends-panel">
@@ -96,7 +105,7 @@ class SongDetail extends Component {
               onChange={this.handleChange}/>
             <button>Create Section</button>
           </form>
-          {/* {songs} */}
+          {sections}
         </div>
       </div>
     );

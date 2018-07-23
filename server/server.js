@@ -30,7 +30,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: 2 * 7 * 60 * 60 * 1000
+    maxAge: 7 * 24 * 60 * 60 * 1000
   }
 }));
 
@@ -73,6 +73,8 @@ app.get('/api/song/:id', songsController.getSongById);
 app.post('/api/collaborators', songsController.addCollaborator);
 app.get('/api/collaborators/:id', songsController.getCollaborators);
 app.delete('/api/collaborators/:songs_id/:users_id', songsController.removeCollaborator);
+
+app.post('/api/sections', songsController.addSection);
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`);

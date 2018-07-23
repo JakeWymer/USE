@@ -9,7 +9,6 @@ const addSong = (req, res) => {
         .catch(err => res.send(err));
     })
     .catch(err => {
-      console.log(err);
       res.send(err)
     });
 }
@@ -36,7 +35,11 @@ const getSongById = (req, res) => {
       req.app.get('db').songs.get_collaborators(req.params.id)
         .then(collaborators => {
           song[0].collaborators = collaborators;
-          res.send(song)
+          req.app.get('db').songs.get_sections(req.params.id)
+            .then(sections => {
+              song[0].sections = sections;
+              res.send(song)
+            })
         })
         .catch(err => res.send(err));
     })
@@ -63,11 +66,21 @@ const removeCollaborator = (req, res) => {
     .catch(err => res.send(err));
 }
 
+const addSection = (req, res) => {
+  let {songs_id, section_name} = req.body;
+  req.app.get('db').songs.add_section([songs_id, section_name, 'I - IV - V'])
+  .then(() => {
+      res.sendStatus(200);
+  })
+  .catch(err => console.log(err));
+}
+
 module.exports = {
   addSong,
   getSongs,
   getSongById,
   addCollaborator,
   getCollaborators,
-  removeCollaborator
+  removeCollaborator,
+  addSection
 };

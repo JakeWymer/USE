@@ -1,0 +1,14 @@
+.section {
+    background-color: var(--light-grey);
+    margin-bottom: 20px;
+    width: 50%;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 3px solid #d9d9d9;
+}

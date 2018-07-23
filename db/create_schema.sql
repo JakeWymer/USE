@@ -21,7 +21,14 @@ CREATE TABLE IF NOT EXISTS songs(
 );
 
 CREATE TABLE IF NOT EXISTS collaborators(
-    collaborators_id SERIAL PRIMARY Key,
+    collaborators_id SERIAL PRIMARY KEY,
     songs_id INTEGER REFERENCES songs(songs_id),
     users_id INTEGER REFERENCES users(users_id)
+);
+
+CREATE TABLE IF NOT EXISTS sections(
+    sections_id SERIAL PRIMARY KEY,
+    songs_id INTEGER REFERENCES songs(songs_id),
+    section_name VARCHAR(50),
+    progression VARCHAR(50)
 );

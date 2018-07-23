@@ -10,10 +10,7 @@ const SongItem = (props) => {
   return (
     <div className="song">
       <div className="title">
-        <Link to={{
-          pathname: `/song/${props.song.songs_id}`,
-          collaborators: props.song.collaborators
-        }}>
+        <Link to={`/song/${props.song.songs_id}`}>
           <h3>{props.song.title}</h3>
         </Link>
       </div>

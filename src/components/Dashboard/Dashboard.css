@@ -5,12 +5,11 @@
 
 .friends-panel {
     flex: 1;
-    border: 1px solid black;
+    border-right: 3px solid var(--light-grey);
 }
 
 .songs-panel {
     flex: 3;
-    border: 1px solid black;
     padding-top: 50px;
     display: flex;
     flex-direction: column;

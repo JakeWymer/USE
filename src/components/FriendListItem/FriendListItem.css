@@ -7,7 +7,7 @@
 }
 
 .friend img{
-    width: 75px;
+    width: 50px;
     border-radius: 50%;
 }
 
@@ -17,4 +17,8 @@
 
 .friend i {
     color: var(--light-blue);
+}
+
+i.orange {
+    color: var(--orange);
 }

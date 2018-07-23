@@ -37,6 +37,7 @@ class Dashboard extends Component {
         .catch(err => console.log(err));
       axios.get(`/api/songs/${this.props.user.currentUser.users_id}`)
         .then(songs => {
+          console.log(songs);
           this.setState({loading: false, songs: songs.data});
         })
         .catch(err => console.log(err))
@@ -46,6 +47,7 @@ class Dashboard extends Component {
   async handleSubmit(e) {
     e.preventDefault();
     let songs = await axios.post('/api/songs', {name: this.state.songInput, users_id: this.props.user.currentUser.users_id});
+    console.log(songs);
     this.setState({songs: songs.data, songInput: ''});
   }
 

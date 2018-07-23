@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 import {setCurrentUser} from '../../ducks/userReducer';
 import SearchBar from '../SearchBar/SearchBar';
 import './Header.css';
@@ -30,7 +31,7 @@ class Header extends Component {
     return (
       <header>
         <div className="logo">
-          <p>U.S.E</p>
+          <Link to="/dashboard"><p>U.S.E</p></Link>
         </div>
         {input}
         {headerContent}

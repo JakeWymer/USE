@@ -15,7 +15,13 @@ CREATE TABLE IF NOT EXISTS friends(
 CREATE TABLE IF NOT EXISTS songs(
     songs_id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(users_id),
-    name VARCHAR(50),
+    title VARCHAR(50),
     music_key VARCHAR(5),
     bpm INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS collaborators(
+    collaborators_id SERIAL PRIMARY Key,
+    songs_id INTEGER REFERENCES songs(songs_id),
+    users_id INTEGER REFERENCES users(users_id)
 );

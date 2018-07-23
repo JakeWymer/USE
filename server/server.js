@@ -59,14 +59,20 @@ passport.deserializeUser((obj, done) => {
 app.get('/login', userController.login);
 app.get('/logout', userController.logout);
 app.get('/api/currentuser', userController.getUser);
+app.get('/api/users', userController.getUsers);
+
 app.post('/api/friends', userController.addFriend);
 app.get('/api/friends/:id', userController.getFriends);
-app.get('/api/users', userController.getUsers);
 app.delete('/api/friends/:current_id/:friends_id', userController.deleteFriend);
 app.put('/api/friends/:current_id/:friends_id', userController.acceptFriend);
 
 app.post('/api/songs', songsController.addSong);
 app.get('/api/songs/:id', songsController.getSongs);
+app.get('/api/song/:id', songsController.getSongById);
+
+app.post('/api/collaborators', songsController.addCollaborator);
+app.get('/api/collaborators/:id', songsController.getCollaborators);
+app.delete('/api/collaborators/:songs_id/:users_id', songsController.removeCollaborator);
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`);

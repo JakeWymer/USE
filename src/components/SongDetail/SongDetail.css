@@ -1,0 +1,65 @@
+.song-detail {
+    display: flex;
+    min-height: 80vh;
+}
+
+.friends-panel {
+    flex: 1;
+    border-right: 3px solid var(--light-grey);
+}
+
+.song-panel {
+    flex: 3;
+    padding-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: scroll;
+}
+
+.song-panel form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.song-panel input {
+    border: 1px solid #d6d6d6;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.song-panel button {
+    font-size: 14px;
+    padding: 8px;
+    background-color: var(--orange);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    margin-left: 5px;
+}
+
+.loading-wrap {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.song-panel h1 {
+    font-size: 36px;
+}
+
+.song-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.song-meta {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 20px;
+}

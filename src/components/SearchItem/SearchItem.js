@@ -3,19 +3,19 @@ import {connect} from 'react-redux';
 import {addFriend} from '../../ducks/userReducer';
 
 const SearchItem = (props) => {
-  let friend = props.user.friends.find(friend => friend.users_id === props.person.users_id);
+  let friend = props.user.currentUser.friends.find(friend => friend._id === props.person._id);
   let friendBtn = null;
 
   if(!friend) {
     friendBtn = <button
-                  onClick={() => props.addFriend(props.person.users_id, props.user.currentUser.users_id)}>
+                  onClick={() => props.addFriend(props.person)}>
                     Add Friend
                 </button>
   }
 
   return (
     <div>
-      <p>{`${props.person.users_id} : ${props.person.name}`}</p>
+      <p>{`${props.person._id} : ${props.person.name}`}</p>
       {friendBtn}
     </div>
   );

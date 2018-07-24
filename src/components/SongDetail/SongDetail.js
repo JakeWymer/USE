@@ -25,17 +25,15 @@ class SongDetail extends Component {
   
   async componentDidMount() {
     axios.get(`/api/song/${this.props.match.params.id}`)
-      .then(res => this.setState({song: res.data[0], loading: false}))
+      .then(res => this.setState({song: res.data, loading: false}))
       .catch(err => console.log(err));
   }
 
   async handleSubmit(e) {
     e.preventDefault();
-    await axios.post('/api/sections', {songs_id: this.state.song.songs_id, section_name: this.state.sectionInput})
-      .then(() => {
-        axios.get(`/api/song/${this.props.match.params.id}`)
-          .then(res => this.setState({song: res.data[0], sectionInput: ''}))
-          .catch(err => console.log(err)); 
+    await axios.post('/api/sections', {song_id: this.state.song._id, title: this.state.sectionInput})
+      .then(song => {
+        this.setState({song: song.data, sectionInput: ''})
       });
   }
 
@@ -43,21 +41,19 @@ class SongDetail extends Component {
     this.setState({[e.target.name]: e.target.value});
   }
 
-  addCollaborator(users_id) {
-    axios.post(`/api/collaborators`, {users_id, songs_id: this.state.song.songs_id})
-      .then(() => {
-        axios.get(`/api/song/${this.props.match.params.id}`)
-          .then(res => this.setState({song: res.data[0]}))
-          .catch(err => console.log(err));  
+  addCollaborator(user_id) {
+    axios.post(`/api/collaborators`, {user_id, song_id: this.state.song._id})
+      .then(song => {
+          this.setState({song: song.data})
       })
       .catch(err => console.log(err));
   }
 
-  removeCollaborator(users_id) {
-    axios.delete(`/api/collaborators/${this.state.song.songs_id}/${users_id}`)
+  removeCollaborator(user_id) {
+    axios.delete(`/api/collaborators/${this.state.song._id}/${user_id}`)
       .then(() => {
         axios.get(`/api/song/${this.props.match.params.id}`)
-          .then(res => this.setState({song: res.data[0]}))
+          .then(res => this.setState({song: res.data}))
           .catch(err => console.log(err));  
       })
       .catch(err => console.log(err));
@@ -72,7 +68,7 @@ class SongDetail extends Component {
       );
     }
 
-    let friends = this.props.user.friends.map(friend => {
+    let friends = this.props.user.currentUser.friends.map(friend => {
       let collaborator = this.state.song.collaborators.find(c => c.users_id === friend.users_id);
       if(collaborator) {
         return <FriendListItem key={friend.auth_id} friend={friend} page="detail" collaborator={true} removeCollaborator={this.removeCollaborator}/>

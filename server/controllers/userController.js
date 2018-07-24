@@ -1,4 +1,5 @@
 const passport = require('passport');
+const User = require('../models/User');
 
 const login = passport.authenticate('auth0', { 
   successRedirect: 'http://localhost:3000/#/dashboard', 
@@ -20,46 +21,75 @@ const getUser = (req, res) => {
 }
 
 const addFriend = (req, res) => {
-  let {user_one_id, user_two_id} = req.body;
-  req.app.get('db').users.add_friend([user_one_id, user_two_id])
-    .then(() => {
-      req.app.get('db').users.get_friends(user_two_id)
-        .then(friends => res.status(200).send(friends))
-        .catch(err =>  res.send(err));
-    })
-    .catch(err => res.sendStatus(500));
-}
+  User.findOne({_id: req.user._id}, (err, user) => {
+    if(err) {
+      res.send(err)
+    } else {
+      User.findOne({_id: req.body.friend._id}, (err, friend) => {
+        if(err) {
+          return res.send(err);
+        }
 
-const getFriends = (req, res) => {
-  req.app.get('db').users.get_friends(parseInt(req.params.id))
-    .then(friends => res.status(200).send(friends))
-    .catch(err =>  res.send(err));
+        let request = {from: req.user, to: req.body.friend};
+        user.requests.push(request);
+        friend.requests.push(request);
+
+        user.save();
+        friend.save()
+        
+        res.send(user);
+      });
+    }
+  });
 }
 
 const getUsers = (req, res) => {
-  req.app.get('db').users.get_users()
-    .then(users => res.status(200).send(users))
-    .catch(err =>  res.send(err));
+  User.find({}, (err, users) => {
+    if(err) {
+      res.send(err);
+    } else {
+      res.send(users);
+    }
+  })
 }
 
-const deleteFriend = (req, res) => {
-  req.app.get('db').users.delete_friend(req.params.friends_id)
-    .then(() => {
-      req.app.get('db').users.get_friends(req.params.current_id)
-        .then(friends => res.status(200).send(friends))
-        .catch(err =>  res.send(err));
-    })
-    .catch(err => res.sendStatus(500));
-}
+const cancelFriendRequest = (req, res) => {
+  User.findOne({auth_id: req.user.auth_id}, (err, user) => {
+    let newFriendIndex = user.requests.findIndex(request => request.to._id === req.params.toId);
+    user.requests.splice(newFriendIndex, 1);
+    user.save();
+
+    User.findById(req.params.toId, (err, toUser) => {
+      let fromIndex = toUser.requests.findIndex(request => request.from._id === req.user._id);
+      toUser.requests.splice(fromIndex, 1);
+  
+      toUser.save();
+      res.send(user);
+    });
+  });
+};
 
 const acceptFriend = (req, res) => {
-  req.app.get('db').users.accept_friend(req.params.friends_id)
-    .then(() => {
-      req.app.get('db').users.get_friends(req.params.current_id)
-        .then(friends => res.status(200).send(friends))
-        .catch(err =>  res.send(err));
-    })
-    .catch(err => res.sendStatus(500));
+  User.findOne({auth_id: req.user.auth_id}, (err, user) => {
+    let newFriendIndex = user.requests.findIndex(request => request.from._id === req.params.fromId);
+    let friend = user.requests[newFriendIndex].from;
+    friend.friends = []
+    user.friends.push(friend);
+    user.requests.splice(newFriendIndex, 1);
+    user.save();
+
+    User.findById(req.params.fromId, (err, fromUser) => {
+      let toIndex = fromUser.requests.findIndex(request => request.to._id === req.user._id);
+      let toUser = fromUser.requests[toIndex].to;
+      toUser.friends = [];
+
+      fromUser.friends.push(toUser);
+      fromUser.requests.splice(toIndex, 1);
+  
+      fromUser.save();
+      res.send(user);
+    });
+  });
 }
 
 module.exports = {
@@ -67,8 +97,7 @@ module.exports = {
   logout,
   getUser,
   addFriend,
-  getFriends,
   getUsers,
-  deleteFriend,
+  cancelFriendRequest,
   acceptFriend
 }

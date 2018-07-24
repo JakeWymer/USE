@@ -15,7 +15,6 @@ class Dashboard extends Component {
     this.state = {
       loading: true,
       redirect: false,
-      friends: [],
       songInput: '',
       songs: []
     };
@@ -30,23 +29,30 @@ class Dashboard extends Component {
       this.setState({redirect: true});
     } else {
       this.props.setCurrentUser(res.data);
-      axios.get(`/api/friends/${this.props.user.currentUser.users_id}`)
-        .then((friends) => {
-          this.props.setFriends(friends.data);
-        })
-        .catch(err => console.log(err));
-      axios.get(`/api/songs/${this.props.user.currentUser.users_id}`)
+
+      this.setState({loading: false});
+
+      axios.get(`/api/songs/${this.props.user.currentUser._id}`)
         .then(songs => {
-          console.log(songs);
           this.setState({loading: false, songs: songs.data});
         })
-        .catch(err => console.log(err))
+      // axios.get(`/api/friends/${this.props.user.currentUser.users_id}`)
+      //   .then((friends) => {
+      //     this.props.setFriends(friends.data);
+      //   })
+      //   .catch(err => console.log(err));
+      // axios.get(`/api/songs/${this.props.user.currentUser.users_id}`)
+      //   .then(songs => {
+      //     console.log(songs);
+      //     this.setState({loading: false, songs: songs.data});
+      //   })
+      //   .catch(err => console.log(err))
     }
   }
 
   async handleSubmit(e) {
     e.preventDefault();
-    let songs = await axios.post('/api/songs', {name: this.state.songInput, users_id: this.props.user.currentUser.users_id});
+    let songs = await axios.post('/api/songs', {name: this.state.songInput});
     console.log(songs);
     this.setState({songs: songs.data, songInput: ''});
   }
@@ -68,17 +74,22 @@ class Dashboard extends Component {
       );
     }
 
-    let friends = this.props.user.friends.map(friend => {
+    let friends = this.props.user.currentUser.friends.map(friend => {
       return <FriendListItem key={friend.auth_id} friend={friend}/>
     });
 
+    let requests = this.props.user.currentUser.requests.map(request => {
+      return <FriendListItem key={request.from.auth_id} request={request}/>
+    });
+
     let songs = this.state.songs.map(song => {
-      return <SongItem key={song.songs_id} song={song}/>
+      return <SongItem key={song._id} song={song}/>
     });
 
     return (
       <div className="dashboard">
         <div className="friends-panel">
+          {requests}
           {friends}
         </div>
         <div className="songs-panel">

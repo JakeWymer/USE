@@ -2,7 +2,10 @@ const express = require('express');
 const {json} = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
-const massive = require('massive');
+const mongoose = require('mongoose');
+
+const User = require('./models/User.js');
+
 require('dotenv').config();
 
 const userController = require('./controllers/userController');
@@ -14,14 +17,13 @@ const app = express();
 
 const port = process.env.PORT || 5000;
 
-massive(process.env.DB_CONNECTION_STRING)
-  .then(db => {
-    app.set('db', db);
-    app.get('db').create_schema()
-      .then(() => console.log('CREATED SCHEMA'))
-      .catch(err => console.log(err));
-  })
-  .catch(err => console.log(err));
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
+
+let db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log('MONGOOOOO');
+});
 
 app.use(json());
 
@@ -39,17 +41,16 @@ app.use( passport.session());
 passport.use(strategy);
 
 passport.serializeUser((user, done) => {
-  app.get('db').users.get_user_by_authid(user.id)
-    .then(response => {
-      if(!response[0]) {
-        app.get('db').users.add_user([user.id, user._json.name, user._json.picture])
-          .then(res => done(null, res[0]))
-          .catch(err => done(err, null));
-      } else {
-        return done(null, response[0])
-      }
-    })
-    .catch(err => done(err, null));
+  User.findOne({ auth_id: user.id }, (err, res) => {
+    console.log(res);
+    if(res) {
+      return done(null, res)
+    } else {
+      let u = new User({auth_id: user.id, name: user._json.name, pic_url: user._json.picture});
+      u.save();
+      return done(null, u);
+    }
+  });
 });
 
 passport.deserializeUser((obj, done) => {
@@ -62,19 +63,19 @@ app.get('/api/currentuser', userController.getUser);
 app.get('/api/users', userController.getUsers);
 
 app.post('/api/friends', userController.addFriend);
-app.get('/api/friends/:id', userController.getFriends);
-app.delete('/api/friends/:current_id/:friends_id', userController.deleteFriend);
-app.put('/api/friends/:current_id/:friends_id', userController.acceptFriend);
+app.delete('/api/requests/:toId', userController.cancelFriendRequest);
+app.put('/api/friends/:fromId', userController.acceptFriend);
 
 app.post('/api/songs', songsController.addSong);
 app.get('/api/songs/:id', songsController.getSongs);
 app.get('/api/song/:id', songsController.getSongById);
 
 app.post('/api/collaborators', songsController.addCollaborator);
-app.get('/api/collaborators/:id', songsController.getCollaborators);
-app.delete('/api/collaborators/:songs_id/:users_id', songsController.removeCollaborator);
+app.delete('/api/collaborators/:song_id/:user_id', songsController.removeCollaborator);
 
 app.post('/api/sections', songsController.addSection);
+app.get('/api/sections/:id', songsController.getSectionById);
+app.put('/api/sections/:section_id', songsController.updateSection);
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`);

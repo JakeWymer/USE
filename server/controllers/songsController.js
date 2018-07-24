@@ -1,78 +1,125 @@
+const Song = require('../models/Song');
+const User = require('../models/User');
+const Section = require('../models/Section');
+
 const addSong = (req, res) => {
-  let {name, users_id} = req.body;
-  req.app.get('db').songs.create_song([name, users_id, 'c', 100])
-    .then(() => {
-      req.app.get('db').songs.get_songs(users_id)
-        .then(songs => {
-          res.send(songs)
-        })
-        .catch(err => res.send(err));
-    })
-    .catch(err => {
+  let {name} = req.body;
+  let song = new Song({title: name, user_id: req.user._id, music_key: "C", bpm: 100});
+  song.save(err => {
+    if(err) {
       res.send(err)
-    });
+    } else {
+      Song.find({user_id: req.user._id}, (err, songs) => {
+        if(err) {
+          res.send(err)
+        } else {
+          res.send(songs);
+        }
+      })
+    }
+  });
 }
 
 const getSongs = (req, res) => {
-  req.app.get('db').songs.get_songs(req.params.id)
-    .then(songs => {
-      let synced = songs.map(song => {
-        return req.app.get('db').songs.get_collaborators(song.songs_id)
-          .then(collaborators => {
-            song['collaborators'] = collaborators;
-            
-          })
-          .catch(err => res.send(err));
-      });
-      Promise.all(synced).then(() => res.send(songs));
-    })
-    .catch(err => res.send(err));
+  Song.find({user_id: req.params.id}, (err, songs) => {
+    if(err) {
+      res.send(err)
+    } else {
+      res.send(songs);
+    }
+  });
 }
 
 const getSongById = (req, res) => {
-  req.app.get('db').songs.get_song_by_id(req.params.id)
-    .then(song => {
-      req.app.get('db').songs.get_collaborators(req.params.id)
-        .then(collaborators => {
-          song[0].collaborators = collaborators;
-          req.app.get('db').songs.get_sections(req.params.id)
-            .then(sections => {
-              song[0].sections = sections;
-              res.send(song)
-            })
-        })
-        .catch(err => res.send(err));
-    })
-    .catch(err => res.send(err));
+  Song.findById(req.params.id, (err, song) => {
+    if(err) {
+      res.send(err);
+    } else {
+      res.send(song);
+    }
+  });  
 }
 
 const addCollaborator = (req, res) => {
-  let {songs_id, users_id} = req.body;
-  req.app.get('db').songs.add_collaborator([songs_id, users_id])
-    .then(() => res.sendStatus(200))
-    .catch(err => res.send(err));
-}
+  Song.findById(req.body.song_id, (err, song) => {
+    User.findById(req.body.user_id, (err, user) => {
+      let {name, pic_url, _id} = user;
+      song.collaborators.push({name, pic_url, _id});
+      song.save();
 
-const getCollaborators = (req, res) => {
-  req.app.get('db').songs.get_collaborators(req.params.id)
-    .then(collaborators => res.send(collaborators))
-    .catch(err => res.send(err));
+      res.send(song);
+    })
+  })
 }
 
 const removeCollaborator = (req, res) => {
-  let {songs_id, users_id} = req.params;
-  req.app.get('db').songs.remove_collaborator([songs_id, users_id])
-    .then(() => res.sendStatus(200))
-    .catch(err => res.send(err));
+  Song.findById(req.params.song_id, (err, song) => {
+    let collabIndex = song.collaborators.findIndex(collaborator => collaborator._id === req.params.user_id);
+
+    song.collaborators.splice(collabIndex, 1);
+    song.save();
+
+    res.send(song);
+  });
 }
 
 const addSection = (req, res) => {
-  let {songs_id, section_name} = req.body;
-  req.app.get('db').songs.add_section([songs_id, section_name, 'I - IV - V'])
-  .then(() => {
-      res.sendStatus(200);
+  let section = new Section({title: req.body.title, song_id: req.body.song_id, progression: "I - IV - V"});
+  section.save();
+
+  Song.findById(req.body.song_id, (err, song) => {
+    if(err) {
+      return res.send(err);
+    }
+    song.sections.push(section)
+    song.save();
+
+    res.send(song)
+  });
+}
+
+const getSectionById = (req, res) => {
+  Section.findById(req.params.id, (err, section) => {
+    if(err) {
+      return res.send(err);
+    }
+    res.send(section);
+  });
+}
+
+const updateSection = (req, res) => {
+  console.log(req.body);
+  Section.findById(req.params.section_id, (err, section) => {
+    if(err) {
+      return res.send(err);
+    }
+
+    clearSection(section)
+      .then(section => {
+        section.title = req.body.title;
+        section.progression = req.body.progression;
+
+        req.body.lyrics.forEach(lyric => {
+          section.lyrics.push(lyric);
+        });
+
+        console.log(section);
+
+        section.save();
+        res.send(section);
+      });
+  });
+}
+
+const clearSection = section => {
+  return new Promise((resolve, reject) => {
+    section.title = '';
+    section.progression = '';
+    section.lyrics = [];
+    section.uploads = [];
+
+    resolve(section);
   })
-  .catch(err => console.log(err));
 }
 
 module.exports = {
@@ -80,7 +127,8 @@ module.exports = {
   getSongs,
   getSongById,
   addCollaborator,
-  getCollaborators,
   removeCollaborator,
-  addSection
+  addSection,
+  getSectionById,
+  updateSection
 };

@@ -37,13 +37,15 @@ class SongDetail extends Component {
       this.setState({redirect: true});
     } else {
       axios.get(`/api/song/${this.props.match.params.id}`)
-        .then(res => this.setState({
-                                    song: res.data, 
-                                    loading: false,
-                                    titleEdit: res.data.title,
-                                    keyEdit: res.data.music_key,
-                                    bpmEdit: res.data.bpm
-                                  }))
+        .then(res => {
+          this.setState({
+            song: res.data, 
+            loading: false,
+            titleEdit: res.data.title,
+            keyEdit: res.data.music_key,
+            bpmEdit: res.data.bpm
+          })}
+        )
         .catch(err => console.log(err));
     }
   }

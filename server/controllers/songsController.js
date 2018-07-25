@@ -35,7 +35,10 @@ const getSongById = (req, res) => {
     if(err) {
       res.send(err);
     } else {
-      res.send(song);
+      Section.find({song_id: song._id}, (err, sections) => {
+        song.sections = sections;
+        res.send(song);
+      });
     }
   });  
 }
@@ -47,7 +50,10 @@ const addCollaborator = (req, res) => {
       song.collaborators.push({name, pic_url, _id});
       song.save();
 
-      res.send(song);
+      Section.find({song_id: song._id}, (err, sections) => {
+        song.sections = sections;
+        res.send(song);
+      });
     })
   })
 }
@@ -74,7 +80,10 @@ const addSection = (req, res) => {
     song.sections.push(section)
     song.save();
 
-    res.send(song)
+    Section.find({song_id: song._id}, (err, sections) => {
+      song.sections = sections;
+      res.send(song);
+    });
   });
 }
 
@@ -116,10 +125,21 @@ const clearSection = section => {
     section.title = '';
     section.progression = '';
     section.lyrics = [];
-    section.uploads = [];
 
     resolve(section);
   })
+}
+
+const addUpload = (req, res) => {
+  Section.findById(req.params.section_id, (err, section) => {
+    if(err) {
+      return res.send(err);
+    }
+    section.uploads.push(req.body.url);
+    section.save();
+
+    res.send(section.uploads);
+  });
 }
 
 module.exports = {
@@ -130,5 +150,6 @@ module.exports = {
   removeCollaborator,
   addSection,
   getSectionById,
-  updateSection
+  updateSection,
+  addUpload
 };

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import {connect} from 'react-redux';
 import Loading from 'react-loading-components';
+import {Redirect} from 'react-router-dom';
 
 import {setCurrentUser, setFriends} from '../../ducks/userReducer'
 import FriendListItem from '../FriendListItem/FriendListItem';
@@ -14,7 +15,8 @@ class SongDetail extends Component {
     this.state = {
       loading: true,
       sectionInput: '',
-      song: {}
+      song: {},
+      redirect: false
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -24,9 +26,14 @@ class SongDetail extends Component {
   }
   
   async componentDidMount() {
-    axios.get(`/api/song/${this.props.match.params.id}`)
-      .then(res => this.setState({song: res.data, loading: false}))
-      .catch(err => console.log(err));
+    let res = await axios.get('/api/currentuser');
+    if(res.data.message) {
+      this.setState({redirect: true});
+    } else {
+      axios.get(`/api/song/${this.props.match.params.id}`)
+        .then(res => this.setState({song: res.data, loading: false}))
+        .catch(err => console.log(err));
+    }
   }
 
   async handleSubmit(e) {
@@ -60,6 +67,10 @@ class SongDetail extends Component {
   }
 
   render() {
+    if(this.state.redirect) {
+      return <Redirect to="/"/>
+    }
+
     if(this.state.loading) {
       return(
         <div className="loading-wrap">
@@ -77,7 +88,7 @@ class SongDetail extends Component {
     });
 
     let sections = this.state.song.sections.map(section => {
-      return <SectionItem key={section.sections_id} section={section}/>
+      return <SectionItem key={section._id} section={section}/>
     });
 
     return (

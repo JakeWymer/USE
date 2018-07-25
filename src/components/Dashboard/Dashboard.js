@@ -36,17 +36,6 @@ class Dashboard extends Component {
         .then(songs => {
           this.setState({loading: false, songs: songs.data});
         })
-      // axios.get(`/api/friends/${this.props.user.currentUser.users_id}`)
-      //   .then((friends) => {
-      //     this.props.setFriends(friends.data);
-      //   })
-      //   .catch(err => console.log(err));
-      // axios.get(`/api/songs/${this.props.user.currentUser.users_id}`)
-      //   .then(songs => {
-      //     console.log(songs);
-      //     this.setState({loading: false, songs: songs.data});
-      //   })
-      //   .catch(err => console.log(err))
     }
   }
 

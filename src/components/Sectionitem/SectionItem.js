@@ -3,6 +3,10 @@ import {Link} from 'react-router-dom';
 import './SectionItem.css';
 
 const SectionItem = (props) => {
+  let lyrics = props.section.lyrics.map(e => {
+    return <h5 key={e.id}>{e.value}</h5>
+  });
+
   return (
     <div className="section">
       <div className="title">
@@ -11,6 +15,7 @@ const SectionItem = (props) => {
           <h4>{props.section.progression}</h4>
         </Link>
       </div>
+      {lyrics}
     </div>
   );
 };

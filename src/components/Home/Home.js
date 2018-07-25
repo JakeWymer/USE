@@ -3,7 +3,7 @@ import './Home.css';
 
 const musicImage = require('../../assets/Music_Elements.png');
 
-const Home = () => {
+const Home = props => {
   return (
     <div>
       <section id="hero">

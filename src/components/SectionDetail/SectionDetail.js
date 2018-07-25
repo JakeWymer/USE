@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import FileUploader from "react-firebase-file-uploader";
+import firebase from "firebase";
+import ReactAudioPlayer from 'react-audio-player';
+import Loading from 'react-loading-components';
 
 import {
   Accordion,
@@ -19,20 +23,29 @@ class SectionDetail extends Component {
       section: {},
       sectionName: '',
       progression: '',
-      inputs: []
+      inputs: [],
+      uploads: [],
+      loading: false
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.addInput = this.addInput.bind(this);
     this.saveSection = this.saveSection.bind(this);
     this.handleLyrics = this.handleLyrics.bind(this);
+    this.handleFiles = this.handleFiles.bind(this);
+    this.handleUploadSuccess = this.handleUploadSuccess.bind(this);
+    this.handleUploadStart = this.handleUploadStart.bind(this);
   }
   
   componentDidMount() {
     axios.get(`/api/sections/${this.props.match.params.id}`)
       .then(section => {
         this.setState({
-          section: section.data, sectionName: section.data.title, progression: section.data.progression, inputs: section.data.lyrics
+          section: section.data, 
+          sectionName: section.data.title, 
+          progression: section.data.progression, 
+          inputs: section.data.lyrics,
+          uploads: section.data.uploads
         })
       })
       .catch(err => console.log(err));
@@ -67,7 +80,35 @@ class SectionDetail extends Component {
     });
   }
 
+  handleUploadSuccess(filename) {
+    firebase
+      .storage()
+      .ref()
+      .child(filename)
+      .getDownloadURL()
+      .then(url => this.handleFiles(url));
+  }
+
+  handleFiles(url) {
+    axios.post(`/api/sections/${this.props.match.params.id}/uploads`, {url})
+      .then(uploads => {
+        this.setState({uploads: uploads.data, loading: false});
+      });
+  }
+
+  handleUploadStart(){
+    this.setState({loading: true});
+  }
+
   render() {
+    if(this.state.loading) {
+      return(
+        <div className="loading-wrap">
+          <Loading type='tail_spin' width={100} height={100} fill='#f44242' />
+        </div>
+      );
+    }
+
     let inputs = this.state.inputs.map(e => {
       return <input 
         key={e.id}
@@ -76,6 +117,15 @@ class SectionDetail extends Component {
         value={e.value}
         name={e.id}
         onChange={this.handleLyrics}
+      />
+    });
+
+    let uploads = this.state.uploads.map(e => {
+      return <ReactAudioPlayer
+        key={e}
+        src={e}
+        autoPlay={false}
+        controls={true}
       />
     });
 
@@ -119,7 +169,17 @@ class SectionDetail extends Component {
                     <h3>Uploads</h3>
                 </AccordionItemTitle>
                 <AccordionItemBody>
-                    <p>Body content</p>
+                <FileUploader
+                  accept="audio/*"
+                  name="avatar"
+                  randomizeFilename
+                  storageRef={firebase.storage().ref()}
+                  onUploadStart={this.handleUploadStart}
+                  // onUploadError={this.handleUploadError}
+                  onUploadSuccess={this.handleUploadSuccess}
+                  // onProgress={this.handleProgress}
+                />
+                {uploads}
                 </AccordionItemBody>
             </AccordionItem>
           </Accordion>

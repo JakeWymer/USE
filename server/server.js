@@ -29,7 +29,7 @@ app.use(json());
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
-  resave: false,
+  resave: true,
   saveUninitialized: false,
   cookie: {
     maxAge: 7 * 24 * 60 * 60 * 1000
@@ -42,7 +42,6 @@ passport.use(strategy);
 
 passport.serializeUser((user, done) => {
   User.findOne({ auth_id: user.id }, (err, res) => {
-    console.log(res);
     if(res) {
       return done(null, res)
     } else {
@@ -76,6 +75,7 @@ app.delete('/api/collaborators/:song_id/:user_id', songsController.removeCollabo
 app.post('/api/sections', songsController.addSection);
 app.get('/api/sections/:id', songsController.getSectionById);
 app.put('/api/sections/:section_id', songsController.updateSection);
+app.post('/api/sections/:section_id/uploads', songsController.addUpload);
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`);

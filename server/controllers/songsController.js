@@ -154,7 +154,7 @@ const updateSong = (req, res) => {
     song.bpm = bpmEdit;
 
     song.save();
-    
+
     Section.find({song_id: song._id}, (err, sections) => {
       song.sections = sections;
       res.send(song);
@@ -162,6 +162,28 @@ const updateSong = (req, res) => {
   });
 }
 
+const deleteSection = (req, res) => {
+  let {song_id, section_id} = req.params;
+
+  Song.findById(song_id, (err, song) => {
+    if(err) {
+      return res.send(err);
+    }
+
+    let sectionIndex = song.sections.find(s => s._id === section_id);
+    song.sections.splice(sectionIndex, 1);
+
+    song.save();
+
+    Section.remove({_id: section_id}, (err) => {
+      Section.find({song_id: song._id}, (err, sections) => {
+        song.sections = sections;
+        res.send(song);
+      });
+    });
+
+  });
+}
 module.exports = {
   addSong,
   getSongs,
@@ -172,5 +194,6 @@ module.exports = {
   getSectionById,
   updateSection,
   addUpload,
-  updateSong
+  updateSong,
+  deleteSection
 };

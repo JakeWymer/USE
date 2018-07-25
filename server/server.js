@@ -77,6 +77,7 @@ app.post('/api/sections', songsController.addSection);
 app.get('/api/sections/:id', songsController.getSectionById);
 app.put('/api/sections/:section_id', songsController.updateSection);
 app.post('/api/sections/:section_id/uploads', songsController.addUpload);
+app.delete('/api/:song_id/:section_id', songsController.deleteSection);
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`);

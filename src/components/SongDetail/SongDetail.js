@@ -28,6 +28,7 @@ class SongDetail extends Component {
     this.addCollaborator = this.addCollaborator.bind(this);
     this.removeCollaborator = this.removeCollaborator.bind(this);
     this.saveSong = this.saveSong.bind(this);
+    this.deleteSection = this.deleteSection.bind(this);
   }
   
   async componentDidMount() {
@@ -91,6 +92,18 @@ class SongDetail extends Component {
       .catch(err => console.log(err));
   }
 
+  deleteSection(section_id) {
+    axios.delete(`/api/${this.state.song._id}/${section_id}`)
+      .then(res => this.setState({
+        song: res.data, 
+        loading: false,
+        titleEdit: res.data.title,
+        keyEdit: res.data.music_key,
+        bpmEdit: res.data.bpm
+      }))
+      .catch(err => console.log(err));
+  }
+
   render() {
     if(this.state.redirect) {
       return <Redirect to="/"/>
@@ -117,7 +130,10 @@ class SongDetail extends Component {
     });
 
     let sections = this.state.song.sections.map(section => {
-      return <SectionItem key={section._id} section={section}/>
+      return <SectionItem 
+              key={section._id} 
+              section={section}
+              deleteSection={this.deleteSection}/>
     });
 
     let songInfo = null;

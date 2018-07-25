@@ -50,6 +50,9 @@ const addCollaborator = (req, res) => {
       song.collaborators.push({name, pic_url, _id});
       song.save();
 
+      user.collaborating.push(song);
+      user.save();
+
       Section.find({song_id: song._id}, (err, sections) => {
         song.sections = sections;
         res.send(song);
@@ -65,7 +68,17 @@ const removeCollaborator = (req, res) => {
     song.collaborators.splice(collabIndex, 1);
     song.save();
 
-    res.send(song);
+    User.findById(req.params.user_id, (err, user) => {
+      if(err) {
+        return res.send(err);
+      }
+
+      let songIndex = user.collaborating.findIndex(s => s._id === req.params.song_id);
+      user.collaborating.splice(songIndex, 1);
+      
+      user.save();
+      res.send(song);
+    });
   });
 }
 
@@ -97,7 +110,6 @@ const getSectionById = (req, res) => {
 }
 
 const updateSection = (req, res) => {
-  console.log(req.body);
   Section.findById(req.params.section_id, (err, section) => {
     if(err) {
       return res.send(err);
@@ -111,8 +123,6 @@ const updateSection = (req, res) => {
         req.body.lyrics.forEach(lyric => {
           section.lyrics.push(lyric);
         });
-
-        console.log(section);
 
         section.save();
         res.send(section);

@@ -6,7 +6,8 @@ let userSchema = new mongoose.Schema({
   auth_id: String,
   friends: [],
   requests: [],
-  chats: []
+  chats: [],
+  collaborating: []
 });
 
 let User = mongoose.model('User', userSchema);

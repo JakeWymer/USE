@@ -142,6 +142,26 @@ const addUpload = (req, res) => {
   });
 }
 
+const updateSong = (req, res) => {
+  let {titleEdit, keyEdit, bpmEdit} = req.body;
+  Song.findById(req.params.id, (err, song) => {
+    if(err) {
+      return res.send(err);
+    }
+
+    song.title = titleEdit;
+    song.music_key = keyEdit;
+    song.bpm = bpmEdit;
+
+    song.save();
+    
+    Section.find({song_id: song._id}, (err, sections) => {
+      song.sections = sections;
+      res.send(song);
+    });
+  });
+}
+
 module.exports = {
   addSong,
   getSongs,
@@ -151,5 +171,6 @@ module.exports = {
   addSection,
   getSectionById,
   updateSection,
-  addUpload
+  addUpload,
+  updateSong
 };

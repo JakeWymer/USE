@@ -16,13 +16,18 @@ class SongDetail extends Component {
       loading: true,
       sectionInput: '',
       song: {},
-      redirect: false
+      redirect: false,
+      editing: false,
+      titleEdit: '',
+      keyEdit: '',
+      bpmEdit: ''
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.addCollaborator = this.addCollaborator.bind(this);
     this.removeCollaborator = this.removeCollaborator.bind(this);
+    this.saveSong = this.saveSong.bind(this);
   }
   
   async componentDidMount() {
@@ -31,7 +36,13 @@ class SongDetail extends Component {
       this.setState({redirect: true});
     } else {
       axios.get(`/api/song/${this.props.match.params.id}`)
-        .then(res => this.setState({song: res.data, loading: false}))
+        .then(res => this.setState({
+                                    song: res.data, 
+                                    loading: false,
+                                    titleEdit: res.data.title,
+                                    keyEdit: res.data.music_key,
+                                    bpmEdit: res.data.bpm
+                                  }))
         .catch(err => console.log(err));
     }
   }
@@ -66,6 +77,20 @@ class SongDetail extends Component {
       .catch(err => console.log(err));
   }
 
+  saveSong() {
+    this.setState({loading: true, editing: false});
+    let {titleEdit, keyEdit, bpmEdit} = this.state;
+    axios.put(`/api/song/${this.state.song._id}`, {titleEdit, keyEdit, bpmEdit})
+      .then(res => this.setState({
+        song: res.data, 
+        loading: false,
+        titleEdit: res.data.title,
+        keyEdit: res.data.music_key,
+        bpmEdit: res.data.bpm
+      }))
+      .catch(err => console.log(err));
+  }
+
   render() {
     if(this.state.redirect) {
       return <Redirect to="/"/>
@@ -87,23 +112,78 @@ class SongDetail extends Component {
       return <FriendListItem key={friend.auth_id} friend={friend} page="detail" addCollaborator={this.addCollaborator}/>
     });
 
+    let requests = this.props.user.currentUser.requests.map(request => {
+      return <FriendListItem key={request.from.auth_id} request={request}/>
+    });
+
     let sections = this.state.song.sections.map(section => {
       return <SectionItem key={section._id} section={section}/>
     });
 
+    let songInfo = null;
+    let actionBtn = null;
+
+    if(this.state.editing) {
+      songInfo = (
+        <div className="song-info">
+          <input 
+            type="text" 
+            value={this.state.titleEdit}
+            onChange={this.handleChange}
+            name="titleEdit"/>
+          <div className="song-meta">
+            <input 
+              type="text" 
+              value={this.state.keyEdit}
+              onChange={this.handleChange}
+              name="keyEdit"/>
+            <input 
+              type="text" 
+              value={this.state.bpmEdit}
+              onChange={this.handleChange}
+              name="bpmEdit"/>
+          </div>
+        </div>
+      );
+
+      actionBtn = (
+        <button
+            className="edit-btn"
+            onClick={this.saveSong}>
+            Save
+        </button>
+      );
+    } else {
+      songInfo = (
+        <div className="song-info">
+          <h1>{this.state.song.title}</h1>
+          <div className="song-meta">
+            <p>{`Key: ${this.state.song.music_key}`}</p>
+            <p>{`BPM: ${this.state.song.bpm}`}</p>
+          </div>
+        </div>
+      );
+
+      actionBtn = (
+        <button
+            className="edit-btn"
+            onClick={() => this.setState({editing: true})}>
+            Edit
+        </button>
+      );
+    }
+
+
+
     return (
       <div className="song-detail">
         <div className="friends-panel">
+          {requests}
           {friends}
         </div>
         <div className="song-panel">
-          <div className="song-info">
-            <h1>{this.state.song.title}</h1>
-            <div className="song-meta">
-              <p>{`Key: ${this.state.song.music_key}`}</p>
-              <p>{`BPM: ${this.state.song.bpm}`}</p>
-            </div>
-          </div>
+          {actionBtn}
+          {songInfo}
           <form onSubmit={this.handleSubmit}>
             <input 
               type="text"

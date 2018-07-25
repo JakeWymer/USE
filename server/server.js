@@ -68,6 +68,7 @@ app.put('/api/friends/:fromId', userController.acceptFriend);
 app.post('/api/songs', songsController.addSong);
 app.get('/api/songs/:id', songsController.getSongs);
 app.get('/api/song/:id', songsController.getSongById);
+app.put('/api/song/:id', songsController.updateSong);
 
 app.post('/api/collaborators', songsController.addCollaborator);
 app.delete('/api/collaborators/:song_id/:user_id', songsController.removeCollaborator);

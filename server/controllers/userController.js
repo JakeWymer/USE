@@ -1,5 +1,4 @@
 const passport = require('passport');
-const User = require('../models/User');
 
 const login = passport.authenticate('auth0', { 
   successRedirect: 'http://localhost:3000/#/dashboard', 

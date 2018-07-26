@@ -1,5 +1,3 @@
-const Section = require('../models/Section');
-
 const addSong = (req, res) => {
   let db = req.app.get('db').songs;
   db.add_song([req.body.name, "C", 100])

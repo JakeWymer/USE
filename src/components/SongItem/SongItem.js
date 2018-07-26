@@ -5,10 +5,14 @@ import './SongItem.css';
 
 const SongItem = (props) => {
   let collaborators = props.song.collaborators.map(e => {
-      if(e[0].user_id !== props.user.currentUser.user_id){
-        return <p key={e[0].user_id}>{`${e[0].user_id} : ${e[0].name}`}</p>
-      }
-    
+    if(e[0].user_id !== props.user.currentUser.user_id){
+      return(
+        <div className="collaborator">
+          <img src={e[0].pic_url} alt=""/>
+          <p key={e[0].user_id}>{e[0].name}</p>
+        </div>
+      );
+    }
   });
 
   return (

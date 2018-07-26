@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import {Switch, Route} from 'react-router-dom';
+import PrivateRoute from './components/PrivateRoute';
 import Home from './components/Home/Home';
 import Dashboard from './components/Dashboard/Dashboard';
 import SongDetail from './components/SongDetail/SongDetail';
 import SectionDetail from './components/SectionDetail/SectionDetail';
+import Profile from './components/Profile/Profile';
 
 class Routes extends Component {
   render() {
@@ -11,8 +13,9 @@ class Routes extends Component {
       <Switch>
         <Route exact path="/" component={Home}/>
         <Route path="/dashboard" component={Dashboard} />
-        <Route path="/song/:id" component={SongDetail}/>
-        <Route path="/section/:id" component={SectionDetail} />
+        <PrivateRoute path="/song/:id" component={SongDetail}/>
+        <PrivateRoute path="/section/:id" component={SectionDetail} />
+        <PrivateRoute path="/profile/:user_id" component={Profile} />
       </Switch>
     );
   }

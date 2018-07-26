@@ -3,13 +3,13 @@ const {json} = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
 const massive = require('massive');
-const mongoose = require('mongoose');
 
 require('dotenv').config();
 
 const userController = require('./controllers/userController');
 const songsController = require('./controllers/songsController');
 const sectionController = require('./controllers/sectionController');
+const dictionaryController = require('./controllers/dictionaryController');
 
 const strategy = require(`${__dirname}/strategy.js`);
 
@@ -25,14 +25,6 @@ massive(process.env.POSTGRES_URI)
       .catch(err => console.log(err))
   })
   .catch(err => console.log(err));
-
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
-
-let db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  console.log('MONGOOOOO');
-});
 
 app.use(json());
 
@@ -93,9 +85,7 @@ app.delete('/api/:song_id/sections/:section_id', sectionController.deleteSection
 app.get('/api/sections/:section_id', sectionController.getSectionById);
 app.put('/api/sections/:section_id', sectionController.updateSection);
 
-app.get('/api/testing', (req, res) => {
-  req.app.get('db').query('SELECT users FROM u_s;').then(result => res.send(result));
-});
+app.get('/api/words/:word', dictionaryController.search);
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`);

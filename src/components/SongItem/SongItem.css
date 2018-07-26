@@ -9,3 +9,14 @@
     align-items: center;
     border-bottom: 3px solid #d9d9d9;
 }
+
+.collaborator {
+    display: flex;
+    align-items: center;
+}
+
+.collaborator img{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}

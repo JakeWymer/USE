@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import {connect} from 'react-redux';
 import Loading from 'react-loading-components';
-import {Redirect} from 'react-router-dom';
 
 import {setCurrentUser, setFriends} from '../../ducks/userReducer'
 import FriendListItem from '../FriendListItem/FriendListItem';
@@ -33,26 +32,21 @@ class SongDetail extends Component {
   }
   
   async componentDidMount() {
-    let res = await axios.get('/api/currentuser');
-    if(res.data.message) {
-      this.setState({redirect: true});
-    } else {
-      axios.get(`/api/song/${this.props.match.params.id}`)
-        .then(res => {
-          axios.get(`/api/${this.props.match.params.id}/sections`)
-            .then(sections => {
-              this.setState({
-                song: res.data, 
-                loading: false,
-                titleEdit: res.data.title,
-                keyEdit: res.data.music_key,
-                bpmEdit: res.data.bpm,
-                sections: sections.data
-              })
+    axios.get(`/api/song/${this.props.match.params.id}`)
+      .then(res => {
+        axios.get(`/api/${this.props.match.params.id}/sections`)
+          .then(sections => {
+            this.setState({
+              song: res.data, 
+              loading: false,
+              titleEdit: res.data.title,
+              keyEdit: res.data.music_key,
+              bpmEdit: res.data.bpm,
+              sections: sections.data
             })
-            .catch(err => console.log(err));
-        })
-    }
+          })
+          .catch(err => console.log(err));
+      })
   }
 
   async handleSubmit(e) {
@@ -106,10 +100,6 @@ class SongDetail extends Component {
   }
 
   render() {
-    if(this.state.redirect) {
-      return <Redirect to="/"/>
-    }
-
     if(this.state.loading) {
       return(
         <div className="loading-wrap">
@@ -128,7 +118,7 @@ class SongDetail extends Component {
 
     let sections = this.state.sections.map(section => {
       return <SectionItem 
-              key={section._id} 
+              key={section.section_id} 
               section={section}
               deleteSection={this.deleteSection}/>
     });

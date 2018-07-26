@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS songs(
 
 CREATE TABLE IF NOT EXISTS sections(
     section_id SERIAL PRIMARY KEY,
-    song_id INTEGER REFERENCES songs(song_id),
+    song_id INTEGER REFERENCES songs(song_id) ON DELETE CASCADE,
     title VARCHAR(50),
     progression VARCHAR(30),
     lyrics JSON DEFAULT '[]'::JSON,

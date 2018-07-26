@@ -25,7 +25,9 @@ class SectionDetail extends Component {
       progression: '',
       inputs: [],
       uploads: [],
-      loading: false
+      loading: false,
+      dictionaryInput: '',
+      dictionaryResult: {}
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -37,6 +39,7 @@ class SectionDetail extends Component {
     this.handleUploadStart = this.handleUploadStart.bind(this);
     this.removeInput = this.removeInput.bind(this);
     this.removeUpload = this.removeUpload.bind(this);
+    this.dictionarySearch = this.dictionarySearch.bind(this);
   }
   
   componentDidMount() {
@@ -123,6 +126,12 @@ class SectionDetail extends Component {
     let index = uploads.findIndex(i => i.id === id);
     uploads.splice(index, 1);
     this.setState({uploads}, () => this.saveSection());    
+  }
+
+  async dictionarySearch(e) {
+    e.preventDefault();
+    let res = await axios.get(`/api/words/${this.state.dictionaryInput}`);
+    console.log(res.data);
   }
 
   render() {
@@ -219,9 +228,14 @@ class SectionDetail extends Component {
           </Accordion>
         </div>
         <div className="dictionary-panel">
-          <input 
-            type="text"
-            placeholder="Search Term"/>
+            <form onSubmit={this.dictionarySearch}>
+              <input 
+                type="text"
+                placeholder="Search Term"
+                name="dictionaryInput"
+                onChange={this.handleChange}
+                value={this.state.dictionaryInput}/>   
+          </form>
         </div>
       </div>
     );

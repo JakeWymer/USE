@@ -10,34 +10,23 @@ const FriendListItem = (props) => {
   if(props.page === "detail") {
     collab = <i 
               className="fas fa-plus fa-2x"
-              onClick={() => props.addCollaborator(props.friend._id)}></i>
+              onClick={() => props.addCollaborator(props.friend.user_id)}></i>
 
     if(props.collaborator) {
       collab = <i 
                 className="fas fa-times fa-2x orange"
-                onClick={() => props.removeCollaborator(props.friend._id)}></i>
+                onClick={() => props.removeCollaborator(props.friend.user_id)}></i>
     }
   }
 
-  if(props.request) {
-    if(props.request.from.auth_id === props.user.currentUser.auth_id) {
-      button = <button onClick={() => props.cancelFriend(props.request.to._id)}>Cancel</button>;
-      return (
-        <div className="friend">
-          <img src={props.request.to.pic_url} alt=""/>
-          <h2>{props.request.to.name}</h2>
-          {button}
-          {collab}
-        </div>
-      );
+  if(props.friend.status === 'pending') {
+    if(props.friend.from_user === props.user.currentUser.user_id) {
+      button = <button onClick={() => props.cancelFriend(props.friend.friend_id)}>Cancel</button>;
     } else {
-      button = <button onClick={() => props.acceptFriend(props.request.from._id)}>Accept</button>;
-      return (
-        <div className="friend">
-          <img src={props.request.from.pic_url} alt=""/>
-          <h2>{props.request.from.name}</h2>
-          {button}
-          {collab}
+      button = (
+        <div className="option-buttons">
+          <button onClick={() => props.acceptFriend(props.friend.friend_id)}>Accept</button>
+          <button onClick={() => props.cancelFriend(props.friend.friend_id)}>Decline</button>
         </div>
       );
     }

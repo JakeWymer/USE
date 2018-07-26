@@ -10,7 +10,7 @@ class Header extends Component {
     let headerContent = null;
     let input = null;
 
-    if(this.props.user.currentUser._id) {
+    if(this.props.user.currentUser.user_id) {
       headerContent = (
         <nav>
           <p>Profile</p>

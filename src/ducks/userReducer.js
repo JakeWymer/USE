@@ -7,7 +7,7 @@ const initialState = {
 
 const SET_USER = 'SET_USER';
 const SET_FRIENDS = 'SET_FRIENDS';
-const ADD_FRIEND = 'ADD_FRIEND';
+const SEND_FRIEND_REQUEST = 'SEND_FRIEND_REQUEST';
 const CANCEL_FRIEND = 'CANCEL_FRIEND';
 const ACCEPT_FRIEND = 'ACCEPT_FRIEND'
 
@@ -25,17 +25,17 @@ export function setFriends(friends) {
   }
 }
 
-export function addFriend(friend) {
+export function sendFriendRequest(friend) {
   return {
-    type: ADD_FRIEND,
-    payload: axios.post('/api/friends', {friend})
+    type: SEND_FRIEND_REQUEST,
+    payload: axios.post(`/api/friends/${friend.user_id}`)
   }
 }
 
 export function cancelFriend(friends_id) {
   return {
     type: CANCEL_FRIEND,
-    payload: axios.delete(`/api/requests/${friends_id}`)
+    payload: axios.delete(`/api/friends/${friends_id}`)
   }
 }
 
@@ -58,20 +58,20 @@ export default function userReducer(state = initialState, action) {
         ...state,
         friends: action.payload
       }
-    case `${ADD_FRIEND}_FULFILLED`:
+    case `${SEND_FRIEND_REQUEST}_FULFILLED`:
       return {
         ...state,
-        currentUser: action.payload.data
-      }
-    case `${CANCEL_FRIEND}_FULFILLED`:
-      return {
-        ...state,
-        currentUser: action.payload.data
+        friends: action.payload.data
       }
     case `${ACCEPT_FRIEND}_FULFILLED`:
       return {
         ...state,
-        currentUser: action.payload.data
+        friends: action.payload.data
+      }
+    case `${CANCEL_FRIEND}_FULFILLED`:
+      return {
+        ...state,
+        friends: action.payload.data
       }
     default:
       return state;

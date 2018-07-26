@@ -1,21 +1,21 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {addFriend} from '../../ducks/userReducer';
+import {sendFriendRequest} from '../../ducks/userReducer';
 
 const SearchItem = (props) => {
-  let friend = props.user.currentUser.friends.find(friend => friend._id === props.person._id);
+  let friend = props.user.friends.find(friend => friend.user_id === props.person.user_id);
   let friendBtn = null;
 
   if(!friend) {
     friendBtn = <button
-                  onClick={() => props.addFriend(props.person)}>
+                  onClick={() => props.sendFriendRequest(props.person)}>
                     Add Friend
                 </button>
   }
 
   return (
     <div>
-      <p>{`${props.person._id} : ${props.person.name}`}</p>
+      <p>{`${props.person.user_id} : ${props.person.name}`}</p>
       {friendBtn}
     </div>
   );
@@ -23,4 +23,4 @@ const SearchItem = (props) => {
 
 const mapStateToProps = state => state;
 
-export default connect(mapStateToProps, {addFriend})(SearchItem);
+export default connect(mapStateToProps, {sendFriendRequest})(SearchItem);

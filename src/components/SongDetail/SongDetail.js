@@ -20,7 +20,8 @@ class SongDetail extends Component {
       editing: false,
       titleEdit: '',
       keyEdit: '',
-      bpmEdit: ''
+      bpmEdit: '',
+      sections: []
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -38,23 +39,27 @@ class SongDetail extends Component {
     } else {
       axios.get(`/api/song/${this.props.match.params.id}`)
         .then(res => {
-          this.setState({
-            song: res.data, 
-            loading: false,
-            titleEdit: res.data.title,
-            keyEdit: res.data.music_key,
-            bpmEdit: res.data.bpm
-          })}
-        )
-        .catch(err => console.log(err));
+          axios.get(`/api/${this.props.match.params.id}/sections`)
+            .then(sections => {
+              this.setState({
+                song: res.data, 
+                loading: false,
+                titleEdit: res.data.title,
+                keyEdit: res.data.music_key,
+                bpmEdit: res.data.bpm,
+                sections: sections.data
+              })
+            })
+            .catch(err => console.log(err));
+        })
     }
   }
 
   async handleSubmit(e) {
     e.preventDefault();
-    await axios.post('/api/sections', {song_id: this.state.song._id, title: this.state.sectionInput})
-      .then(song => {
-        this.setState({song: song.data, sectionInput: ''})
+    await axios.post('/api/sections', {song_id: this.state.song.song_id, title: this.state.sectionInput})
+      .then(sections => {
+        this.setState({sections: sections.data, sectionInput: ''})
       });
   }
 
@@ -63,7 +68,7 @@ class SongDetail extends Component {
   }
 
   addCollaborator(user_id) {
-    axios.post(`/api/collaborators`, {user_id, song_id: this.state.song._id})
+    axios.post(`/api/collaborators`, {user_id, song_id: this.state.song.song_id})
       .then(song => {
           this.setState({song: song.data})
       })
@@ -71,11 +76,9 @@ class SongDetail extends Component {
   }
 
   removeCollaborator(user_id) {
-    axios.delete(`/api/collaborators/${this.state.song._id}/${user_id}`)
-      .then(() => {
-        axios.get(`/api/song/${this.props.match.params.id}`)
-          .then(res => this.setState({song: res.data}))
-          .catch(err => console.log(err));  
+    axios.delete(`/api/collaborators/${this.state.song.song_id}/${user_id}`)
+      .then(song => {
+        this.setState({song: song.data});  
       })
       .catch(err => console.log(err));
   }
@@ -83,7 +86,7 @@ class SongDetail extends Component {
   saveSong() {
     this.setState({loading: true, editing: false});
     let {titleEdit, keyEdit, bpmEdit} = this.state;
-    axios.put(`/api/song/${this.state.song._id}`, {titleEdit, keyEdit, bpmEdit})
+    axios.put(`/api/song/${this.state.song.song_id}`, {titleEdit, keyEdit, bpmEdit})
       .then(res => this.setState({
         song: res.data, 
         loading: false,
@@ -95,14 +98,10 @@ class SongDetail extends Component {
   }
 
   deleteSection(section_id) {
-    axios.delete(`/api/${this.state.song._id}/${section_id}`)
-      .then(res => this.setState({
-        song: res.data, 
-        loading: false,
-        titleEdit: res.data.title,
-        keyEdit: res.data.music_key,
-        bpmEdit: res.data.bpm
-      }))
+    axios.delete(`/api/${this.state.song.song_id}/sections/${section_id}`)
+      .then(sections => {
+        this.setState({sections: sections.data})
+      })
       .catch(err => console.log(err));
   }
 
@@ -119,19 +118,15 @@ class SongDetail extends Component {
       );
     }
 
-    let friends = this.props.user.currentUser.friends.map(friend => {
-      let collaborator = this.state.song.collaborators.find(c => c.users_id === friend.users_id);
+    let friends = this.props.user.friends.map(friend => {
+      let collaborator = this.state.song.song_users.includes(friend.user_id);
       if(collaborator) {
         return <FriendListItem key={friend.auth_id} friend={friend} page="detail" collaborator={true} removeCollaborator={this.removeCollaborator}/>
       }
       return <FriendListItem key={friend.auth_id} friend={friend} page="detail" addCollaborator={this.addCollaborator}/>
     });
 
-    let requests = this.props.user.currentUser.requests.map(request => {
-      return <FriendListItem key={request.from.auth_id} request={request}/>
-    });
-
-    let sections = this.state.song.sections.map(section => {
+    let sections = this.state.sections.map(section => {
       return <SectionItem 
               key={section._id} 
               section={section}
@@ -196,7 +191,6 @@ class SongDetail extends Component {
     return (
       <div className="song-detail">
         <div className="friends-panel">
-          {requests}
           {friends}
         </div>
         <div className="song-panel">

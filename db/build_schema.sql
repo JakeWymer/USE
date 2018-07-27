@@ -2,7 +2,8 @@ CREATE TABLE IF NOT EXISTS users(
     user_id SERIAL PRIMARY KEY,
     auth_id VARCHAR(100),
     name VARCHAR(80),
-    pic_url TEXT
+    pic_url TEXT,
+    bio TEXT
 );
 
 CREATE TABLE IF NOT EXISTS friends(

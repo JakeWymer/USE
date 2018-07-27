@@ -7,9 +7,9 @@ const SongItem = (props) => {
   let collaborators = props.song.collaborators.map(e => {
     if(e[0].user_id !== props.user.currentUser.user_id){
       return(
-        <div className="collaborator">
+        <div className="collaborator" key={e[0].user_id}>
           <img src={e[0].pic_url} alt=""/>
-          <p key={e[0].user_id}>{e[0].name}</p>
+          <p>{e[0].name}</p>
         </div>
       );
     }

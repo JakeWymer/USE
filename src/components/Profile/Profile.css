@@ -1,3 +1,30 @@
+.loading-wrap {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .profile-wrap {
     min-height: 80vh;
+    display: flex;
+}
+
+.user-panel {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    flex: 2;
+    padding-top: 20px;
+}
+
+.user-panel img{
+    height: 300px;
+    width: 300px;
+    border-radius: 5px;
+    align-self: center;
+}
+
+.song-panel {
+    flex: 2;
 }

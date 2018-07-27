@@ -26,7 +26,13 @@ const getUsers = (req, res) => {
 }
 
 const getFriends = (req, res) => {
-  req.app.get('db').users.get_friends(req.user.user_id)
+  let user_id = req.user.user_id;
+  
+  if(req.params.user_id) {
+    user_id = req.params.user_id;
+  }
+
+  req.app.get('db').users.get_friends(user_id)
     .then(friends => res.send(friends))
     .catch(err => res.send(err));
 }
@@ -49,6 +55,12 @@ const cancelFriendRequest = (req, res) => {
     .catch(err => res.send(err));
 };
 
+const getUserById = (req, res) => {
+  req.app.get('db').users.get_user_by_id(req.params.user_id)
+    .then(user => res.send(user))
+    .catch(err => res.send(err));
+}
+
 module.exports = {
   login,
   logout,
@@ -57,5 +69,6 @@ module.exports = {
   getFriends,
   sendFriendRequest,
   cancelFriendRequest,
-  acceptFriendRequest
+  acceptFriendRequest,
+  getUserById
 }

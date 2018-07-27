@@ -65,8 +65,10 @@ app.get('/login', userController.login);
 app.get('/logout', userController.logout);
 app.get('/api/currentuser', userController.getUser);
 app.get('/api/users', userController.getUsers);
+app.get('/api/users/:user_id', userController.getUserById);
 
 app.get('/api/friends', userController.getFriends);
+app.get('/api/friends/:user_id', userController.getFriends);
 app.post('/api/friends/:to_id', userController.sendFriendRequest);
 app.put('/api/friends/:friend_id', userController.acceptFriendRequest);
 app.delete('/api/friends/:friend_id', userController.cancelFriendRequest);

@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 import {cancelFriend, acceptFriend} from '../../ducks/userReducer';
 import './FriendListItem.css';
 
@@ -35,7 +36,7 @@ const FriendListItem = (props) => {
   return (
     <div className="friend">
       <img src={props.friend.pic_url} alt=""/>
-      <h2>{props.friend.name}</h2>
+      <Link to={`/profile/${props.friend.user_id}`}><h2>{props.friend.name}</h2></Link>
       {button}
       {collab}
     </div>

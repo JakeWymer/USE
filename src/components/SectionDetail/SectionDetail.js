@@ -27,7 +27,12 @@ class SectionDetail extends Component {
       uploads: [],
       loading: false,
       dictionaryInput: '',
-      dictionaryResult: {}
+      dictionaryResult: {},
+      word: {},
+      synonyms: [], 
+      antonyms: [], 
+      rhymes: [], 
+      nearRhymes: []
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -131,7 +136,13 @@ class SectionDetail extends Component {
   async dictionarySearch(e) {
     e.preventDefault();
     let res = await axios.get(`/api/words/${this.state.dictionaryInput}`);
-    console.log(res.data);
+    this.setState({
+      word: res.data.word[0],
+      synonyms: res.data.synonyms, 
+      antonyms: res.data.antonyms, 
+      rhymes: res.data.rhymes, 
+      nearRhymes: res.data.nearRhymes
+    });
   }
 
   render() {
@@ -170,6 +181,28 @@ class SectionDetail extends Component {
           <button onClick={() => this.removeUpload(e.id)}>X</button>
         </div>
       );
+    });
+
+    let def = null;
+
+    if(this.state.word.defs) {
+      def = this.state.word.defs[0];
+    }
+
+    let rhymes = this.state.rhymes.map((rhyme, i) => {
+      return <h3>{rhyme.word}</h3>
+    });
+
+    let nearRhymes = this.state.nearRhymes.map((rhyme, i) => {
+      return <h3>{rhyme.word}</h3>
+    });
+
+    let synonyms = this.state.synonyms.map((synonym, i) => {
+      return <h3>{synonym.word}</h3>
+    });
+
+    let antonyms = this.state.antonyms.map((antonym, i) => {
+      return <h3>{antonym.word}</h3>
     });
 
     return (
@@ -236,6 +269,42 @@ class SectionDetail extends Component {
                 onChange={this.handleChange}
                 value={this.state.dictionaryInput}/>   
           </form>
+          {this.state.word.word}
+          {def}
+          <Accordion>
+            <AccordionItem>
+                <AccordionItemTitle>
+                    <h3>Rhymes</h3>
+                </AccordionItemTitle>
+                <AccordionItemBody>
+                  {rhymes}
+                </AccordionItemBody>
+            </AccordionItem>
+            <AccordionItem>
+                <AccordionItemTitle>
+                    <h3>Near Rhymes</h3>
+                </AccordionItemTitle>
+                <AccordionItemBody>
+                  {nearRhymes}
+                </AccordionItemBody>
+            </AccordionItem>
+            <AccordionItem>
+                <AccordionItemTitle>
+                    <h3>Synonyms</h3>
+                </AccordionItemTitle>
+                <AccordionItemBody>
+                  {synonyms}
+                </AccordionItemBody>
+            </AccordionItem>
+            <AccordionItem>
+                <AccordionItemTitle>
+                    <h3>Antonyms</h3>
+                </AccordionItemTitle>
+                <AccordionItemBody>
+                   {antonyms}
+                </AccordionItemBody>
+            </AccordionItem>
+          </Accordion>
         </div>
       </div>
     );

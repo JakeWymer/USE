@@ -7,7 +7,7 @@ const search = async (req, res) => {
   let synonyms = await axios.get(`http://api.datamuse.com/words?rel_syn=${req.params.word}&md=d&max=10`);
   let antonyms = await axios.get(`http://api.datamuse.com/words?rel_ant=${req.params.word}&md=d&max=10`);
 
-  let result = {word: word.data, rhymes: rhymes.data, synonyms: synonyms.data, antonyms: antonyms.data, nearRhyrmes: nearRhymes.data}
+  let result = {word: word.data, rhymes: rhymes.data, synonyms: synonyms.data, antonyms: antonyms.data, nearRhymes: nearRhymes.data}
 
   res.send(result);
 }

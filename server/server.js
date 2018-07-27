@@ -4,16 +4,20 @@ const session = require('express-session');
 const passport = require('passport');
 const massive = require('massive');
 
-require('dotenv').config();
+require('dotenv').config()
+;
+const app = express();
+
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
 const userController = require('./controllers/userController');
 const songsController = require('./controllers/songsController');
 const sectionController = require('./controllers/sectionController');
 const dictionaryController = require('./controllers/dictionaryController');
+const messageController = require('./controllers/messageController')(app, http);
 
 const strategy = require(`${__dirname}/strategy.js`);
-
-const app = express();
 
 const port = process.env.PORT || 5000;
 
@@ -90,6 +94,6 @@ app.put('/api/sections/:section_id', sectionController.updateSection);
 
 app.get('/api/words/:word', dictionaryController.search);
 
-app.listen(port, () => {
+http.listen(port, () => {
   console.log(`Listening on port: ${port}`);
 });

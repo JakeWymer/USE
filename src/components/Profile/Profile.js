@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import Loading from 'react-loading-components';
 import {connect} from 'react-redux';
-import {Redirect} from 'react-router-dom';
-import FriendListItem from '../FriendListItem/FriendListItem';
 import {cancelFriend} from '../../ducks/userReducer';
 import './Profile.css';
 
@@ -60,6 +58,7 @@ class Profile extends Component{
           <div className="user-panel">
             <img src={this.state.user.pic_url} alt=""/>
             <h2>{this.state.user.name}</h2>
+            <p>{this.state.user.bio}</p>
           </div>
           <div className="song-panel">
             {songs}

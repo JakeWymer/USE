@@ -49,7 +49,8 @@ passport.serializeUser((user, done) => {
         return done(null, result[0])
       }
 
-      db.add_user(user.id, user._json.name, user._json.picture)
+      let bio = "I love U.S.E!"
+      db.add_user(user.id, user._json.name, user._json.picture, bio)
         .then(newUser => {
           return done(null, newUser[0]);
         })

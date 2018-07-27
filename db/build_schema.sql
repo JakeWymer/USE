@@ -29,3 +29,10 @@ CREATE TABLE IF NOT EXISTS sections(
     lyrics JSON DEFAULT '[]'::JSON,
     uploads JSON NOT NULL DEFAULT '[]'::JSON
 );
+
+CREATE TABLE IF NOT EXISTS messages(
+    message_id SERIAL PRIMARY KEY,
+    friend_id INTEGER REFERENCES friends(friend_id),
+    user_id INTEGER REFERENCES users(user_id),
+    body TEXT
+);

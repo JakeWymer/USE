@@ -5,7 +5,7 @@ import {cancelFriend, acceptFriend} from '../../ducks/userReducer';
 import './FriendListItem.css';
 
 const FriendListItem = (props) => {
-  let button = <i className="fas fa-comment-alt fa-2x"></i>
+  let button = <Link to={`/chat/${props.friend.friend_id}`}><i className="fas fa-comment-alt fa-2x"></i></Link>
   let collab = null;
 
   if(props.page === "detail") {

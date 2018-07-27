@@ -3,7 +3,7 @@ import axios from 'axios';
 import {connect} from 'react-redux';
 import Loading from 'react-loading-components';
 import {Redirect} from 'react-router-dom';
-
+ 
 import {setCurrentUser, setFriends} from '../../ducks/userReducer'
 import FriendListItem from '../FriendListItem/FriendListItem';
 import './Dashboard.css';

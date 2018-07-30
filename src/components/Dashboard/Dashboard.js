@@ -16,11 +16,13 @@ class Dashboard extends Component {
       loading: true,
       redirect: false,
       songInput: '',
-      songs: []
+      songs: [],
+      friendsShouldShow: false
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.toggleFriends = this.toggleFriends.bind(this);
   }
   
   async componentDidMount() {
@@ -38,7 +40,6 @@ class Dashboard extends Component {
           console.log(songs);
           this.setState({loading: false, songs: songs.data});
         })
-      // this.setState({loading: false});
     }
   }
 
@@ -51,6 +52,10 @@ class Dashboard extends Component {
 
   handleChange(e) {
     this.setState({[e.target.name]: e.target.value});
+  }
+
+  toggleFriends() {
+    this.setState({friendsShouldShow: !this.state.friendsShouldShow});
   }
 
   render() {
@@ -74,12 +79,23 @@ class Dashboard extends Component {
       return <SongItem key={song.song_id} song={song}/>
     });
 
+    let songsDisplay = 'songs-show';
+    let friendsDisplay = 'friends-hide';
+
+    if(this.state.friendsShouldShow) {
+      songsDisplay = 'songs-hide';
+      friendsDisplay = 'friends-show';
+    }
+
     return (
       <div className="dashboard">
-        <div className="friends-panel">
+        <div className={`friends-panel ${friendsDisplay}`}>
           {friends}
+          <i 
+            class="fa fa-times fa-3x open-friends-btn"
+            onClick={this.toggleFriends}></i>
         </div>
-        <div className="songs-panel">
+        <div className={`songs-panel ${songsDisplay}`}>
           <form onSubmit={this.handleSubmit}>
             <input 
               type="text"
@@ -89,6 +105,9 @@ class Dashboard extends Component {
             <button>Create Song</button>
           </form>
           {songs}
+          <i 
+            class="fa fa-user-friends fa-3x open-friends-btn"
+            onClick={this.toggleFriends}></i>
         </div>
       </div>
     );

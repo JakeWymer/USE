@@ -4,17 +4,34 @@
 }
 
 .friends-panel {
-    flex: 1;
-    border-right: 3px solid var(--light-grey);
+    display: none;
+    position: relative;
 }
 
 .songs-panel {
     flex: 3;
     padding-top: 50px;
-    display: flex;
+    /* display: flex; */
     flex-direction: column;
     align-items: center;
     overflow: scroll;
+    position: relative;
+}
+
+.songs-show {
+    display: flex;
+}
+
+.hide {
+    display: none;
+}
+
+.songs-hide {
+    display: none;
+}
+
+.friends-show {
+    display: block;
 }
 
 .songs-panel form {
@@ -52,4 +69,31 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.open-friends-btn {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    display: block;
+}
+
+@media(min-width: 768px) {
+    .friends-panel {
+        /* display: block; */
+        flex: 1;
+        border-right: 3px solid var(--light-grey);
+    }
+
+    .open-friends-btn {
+        display: none;
+    }
+
+    .friends-hide {
+        display: block;
+    }
+    
+    .songs-hide {
+        display: flex;
+    }
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 import {sendFriendRequest} from '../../ducks/userReducer';
 import './SearchItem.css';
 
@@ -16,7 +17,8 @@ const SearchItem = (props) => {
 
   return (
     <div className="search-item">
-      <p>{`${props.person.user_id} : ${props.person.name}`}</p>
+      <img src={props.person.pic_url} alt=""/>
+      <Link to={`/profile/${props.person.user_id}`}><p>{props.person.name}</p></Link>
       {friendBtn}
     </div>
   );

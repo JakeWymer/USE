@@ -2,3 +2,18 @@
     padding: 10px 0;
     border-bottom: 1px solid var(--light-grey);
 }
+
+.search-item button {
+    font-size: 14px;
+    padding: 8px;
+    background-color: var(--orange);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    margin-top: 5px;
+}
+
+.search-item img {
+    width: 50px;
+    border-radius: 50%;
+}

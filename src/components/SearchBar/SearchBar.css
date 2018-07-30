@@ -1,0 +1,12 @@
+.search-wrap {
+    position: relative;
+}
+
+.search-results-wrap {
+    position: absolute;
+    border: 1px solid var(--light-grey);
+    width: 100%;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+}

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import {connect} from 'react-redux';
 import SearchItem from '../SearchItem/SearchItem';
+import './SearchBar.css';
 
 class SearchBar extends Component {
   constructor(props) {
@@ -10,7 +11,8 @@ class SearchBar extends Component {
     this.state = {
       users: [],
       filteredUsers: [],
-      search: ''
+      search: '',
+      resultDisplay: 'none'
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -22,10 +24,15 @@ class SearchBar extends Component {
   }
 
   handleChange(e) {
+    let resultDisplay = 'none';
+    if(e.target.value.length > 0) {
+      resultDisplay = 'block'
+    }
+
     let filteredUsers = this.state.users.slice().filter(user => {
-      return user.name.toLowerCase().includes(e.target.value);
+      return user.name.toLowerCase().includes(e.target.value.toLowerCase());
     });
-    this.setState({[e.target.name]: e.target.value, filteredUsers});
+    this.setState({[e.target.name]: e.target.value, filteredUsers, resultDisplay});
   }
 
   render() {
@@ -46,13 +53,13 @@ class SearchBar extends Component {
     }
 
     return (
-      <div>
+      <div className="search-wrap">
         <input 
           type="text"
           value={this.state.search}
           name="search"
           onChange={this.handleChange}/>
-        <div>
+        <div className="search-results-wrap" style={{display: this.state.resultDisplay}}>
           {filtered}
         </div>
       </div>

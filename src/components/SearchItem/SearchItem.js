@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {sendFriendRequest} from '../../ducks/userReducer';
+import './SearchItem.css';
 
 const SearchItem = (props) => {
   let friend = props.user.friends.find(friend => friend.user_id === props.person.user_id);
@@ -14,7 +15,7 @@ const SearchItem = (props) => {
   }
 
   return (
-    <div>
+    <div className="search-item">
       <p>{`${props.person.user_id} : ${props.person.name}`}</p>
       {friendBtn}
     </div>

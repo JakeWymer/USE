@@ -7,6 +7,7 @@ import {setCurrentUser, setFriends} from '../../ducks/userReducer'
 import FriendListItem from '../FriendListItem/FriendListItem';
 import './SongDetail.css';
 import SectionItem from '../Sectionitem/SectionItem';
+import { Redirect } from 'react-router-dom';
 
 class SongDetail extends Component {
   constructor(props) {
@@ -20,7 +21,9 @@ class SongDetail extends Component {
       titleEdit: '',
       keyEdit: '',
       bpmEdit: '',
-      sections: []
+      sections: [],
+      authorized: true,
+      friendsShouldShow: false
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -29,11 +32,15 @@ class SongDetail extends Component {
     this.removeCollaborator = this.removeCollaborator.bind(this);
     this.saveSong = this.saveSong.bind(this);
     this.deleteSection = this.deleteSection.bind(this);
+    this.toggleFriends = this.toggleFriends.bind(this);
   }
   
   async componentDidMount() {
     axios.get(`/api/song/${this.props.match.params.id}`)
       .then(res => {
+        if(!res.data.song_users.includes(this.props.user.currentUser.user_id)) {
+          this.setState({authorized: false});
+        }
         axios.get(`/api/${this.props.match.params.id}/sections`)
           .then(sections => {
             this.setState({
@@ -99,6 +106,10 @@ class SongDetail extends Component {
       .catch(err => console.log(err));
   }
 
+  toggleFriends() {
+    this.setState({friendsShouldShow: !this.state.friendsShouldShow});
+  }
+
   render() {
     if(this.state.loading) {
       return(
@@ -106,6 +117,10 @@ class SongDetail extends Component {
           <Loading type='tail_spin' width={100} height={100} fill='#f44242' />
         </div>
       );
+    }
+
+    if(!this.state.authorized) {
+      return <Redirect to='/dashboard'/>
     }
 
     let friends = this.props.user.friends.map(friend => {
@@ -176,14 +191,23 @@ class SongDetail extends Component {
       );
     }
 
+    let songsDisplay = 'songs-show';
+    let friendsDisplay = 'friends-hide';
 
+    if(this.state.friendsShouldShow) {
+      songsDisplay = 'songs-hide';
+      friendsDisplay = 'friends-show';
+    }
 
     return (
       <div className="song-detail">
-        <div className="friends-panel">
+        <div className={`friends-panel ${friendsDisplay}`}>
           {friends}
+          <i 
+            class="fa fa-times fa-3x open-friends-btn"
+            onClick={this.toggleFriends}></i>
         </div>
-        <div className="song-panel">
+        <div className={`song-panel ${songsDisplay}`}>
           {actionBtn}
           {songInfo}
           <form onSubmit={this.handleSubmit}>
@@ -195,6 +219,9 @@ class SongDetail extends Component {
             <button>Create Section</button>
           </form>
           {sections}
+          <i 
+            class="fa fa-user-friends fa-3x open-friends-btn"
+            onClick={this.toggleFriends}></i>
         </div>
       </div>
     );

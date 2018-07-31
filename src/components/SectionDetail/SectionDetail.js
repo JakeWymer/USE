@@ -4,6 +4,8 @@ import FileUploader from "react-firebase-file-uploader";
 import firebase from "firebase";
 import ReactAudioPlayer from 'react-audio-player';
 import Loading from 'react-loading-components';
+import {Redirect} from 'react-router-dom';
+import {connect} from 'react-redux';
 
 import {
   Accordion,
@@ -32,7 +34,8 @@ class SectionDetail extends Component {
       synonyms: [], 
       antonyms: [], 
       rhymes: [], 
-      nearRhymes: []
+      nearRhymes: [],
+      authorized: true
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -50,6 +53,9 @@ class SectionDetail extends Component {
   componentDidMount() {
     axios.get(`/api/sections/${this.props.match.params.id}`)
       .then(section => {
+        if(!section.data.song_users.includes(this.props.user.currentUser.user_id)) {
+          this.setState({authorized: false});
+        }
         this.setState({
           section: section.data, 
           sectionName: section.data.title, 
@@ -152,6 +158,10 @@ class SectionDetail extends Component {
           <Loading type='tail_spin' width={100} height={100} fill='#f44242' />
         </div>
       );
+    }
+
+    if(!this.state.authorized) {
+      return <Redirect to='/dashboard'/>
     }
 
     let inputs = this.state.inputs.map(e => {
@@ -311,4 +321,6 @@ class SectionDetail extends Component {
   }
 }
 
-export default SectionDetail;
+const mapStateToProps = state => state;
+
+export default connect(mapStateToProps, null)(SectionDetail);

@@ -61,6 +61,12 @@ const getUserById = (req, res) => {
     .catch(err => res.send(err));
 }
 
+const editUser = (req, res) => {
+  req.app.get('db').users.edit_user(req.body.name, req.body.bio, req.params.user_id)
+    .then(() => res.sendStatus(200))
+    .catch(err => res.send(err));
+}
+
 module.exports = {
   login,
   logout,
@@ -70,5 +76,6 @@ module.exports = {
   sendFriendRequest,
   cancelFriendRequest,
   acceptFriendRequest,
-  getUserById
+  getUserById,
+  editUser
 }

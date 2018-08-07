@@ -71,6 +71,7 @@ app.get('/logout', userController.logout);
 app.get('/api/currentuser', userController.getUser);
 app.get('/api/users', userController.getUsers);
 app.get('/api/users/:user_id', userController.getUserById);
+app.put('/api/users/:user_id', userController.editUser);
 
 app.get('/api/friends', userController.getFriends);
 app.get('/api/friends/:user_id', userController.getFriends);

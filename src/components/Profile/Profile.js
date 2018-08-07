@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import Loading from 'react-loading-components';
 import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 import {cancelFriend} from '../../ducks/userReducer';
 import './Profile.css';
 
@@ -36,12 +37,19 @@ class Profile extends Component{
   
 
   render() {
+    console.log(this.state.isMe);
     if(this.state.loading) {
       return(
         <div className="loading-wrap">
           <Loading type='tail_spin' width={100} height={100} fill='#f44242' />
         </div>
       );
+    }
+
+    let editBtn = null;
+
+    if(this.state.isMe) {
+      editBtn = <Link to={`/edit/${this.props.user.currentUser.user_id}`}><button>Edit Profile</button></Link>
     }
 
     let songs = this.state.songs.map(song => {
@@ -56,6 +64,7 @@ class Profile extends Component{
       <div className="profile">
         <div className="profile-wrap">
           <div className="user-panel">
+            {editBtn}
             <img src={this.state.user.pic_url} alt=""/>
             <h2>{this.state.user.name}</h2>
             <p>{this.state.user.bio}</p>

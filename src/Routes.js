@@ -7,6 +7,7 @@ import SongDetail from './components/SongDetail/SongDetail';
 import SectionDetail from './components/SectionDetail/SectionDetail';
 import Profile from './components/Profile/Profile';
 import Chat from './components/Chat/Chat';
+import EditProfile from './components/EditProfile/EditProfile';
 
 class Routes extends Component {
   render() {
@@ -18,6 +19,7 @@ class Routes extends Component {
         <PrivateRoute path="/section/:id" component={SectionDetail} />
         <PrivateRoute path="/profile/:user_id" component={Profile} />
         <PrivateRoute path="/chat/:chat_id" component={Chat} />
+        <PrivateRoute path="/edit/:user_id" component={EditProfile} />
       </Switch>
     );
   }

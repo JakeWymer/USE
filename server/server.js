@@ -82,6 +82,7 @@ app.post('/api/songs', songsController.addSong);
 app.get('/api/songs/:user_id', songsController.getSongsByUser);
 app.get('/api/song/:song_id', songsController.getSongById);
 app.put('/api/song/:song_id', songsController.updateSong);
+app.delete('/api/song/:song_id', songsController.deleteSong);
 
 app.post('/api/collaborators', songsController.addCollaborator);
 app.delete('/api/collaborators/:song_id/:user_id', songsController.removeCollaborator);

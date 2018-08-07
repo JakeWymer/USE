@@ -23,6 +23,7 @@ class Dashboard extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.toggleFriends = this.toggleFriends.bind(this);
+    this.deleteSong = this.deleteSong.bind(this);
   }
   
   async componentDidMount() {
@@ -58,6 +59,12 @@ class Dashboard extends Component {
     this.setState({friendsShouldShow: !this.state.friendsShouldShow});
   }
 
+  async deleteSong(songId) {
+    let songs = await axios.delete(`/api/song/${songId}`);
+    console.log(songs);
+    this.setState({songs: songs.data});
+  }
+
   render() {
     if(this.state.redirect) {
       return <Redirect to="/"/>
@@ -76,7 +83,10 @@ class Dashboard extends Component {
     });
 
     let songs = this.state.songs.map(song => {
-      return <SongItem key={song.song_id} song={song}/>
+      return <SongItem 
+              key={song.song_id} 
+              song={song}
+              deleteSong={this.deleteSong}/>
     });
 
     let songsDisplay = 'songs-show';

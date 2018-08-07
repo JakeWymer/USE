@@ -42,11 +42,18 @@ const removeCollaborator = (req, res) => {
     .catch(err => res.send(err));
 }
 
+const deleteSong = (req, res) => {
+  req.app.get('db').songs.delete_song(req.params.song_id, req.user.user_id)
+    .then(songs => res.send(songs))
+    .catch(err => res.send(err));
+}
+
 module.exports = {
   addSong,
   getSongsByUser,
   getSongById,
   updateSong,
   addCollaborator,
-  removeCollaborator
+  removeCollaborator,
+  deleteSong
 };

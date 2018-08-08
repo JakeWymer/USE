@@ -13,13 +13,20 @@ const SongItem = (props) => {
         </div>
       );
     }
+    return null;
   });
+
+  let delBtn = <i 
+    className="fas fa-times remove-section"
+    onClick={() => props.deleteSong(props.song.song_id)}></i>
+
+  if(props.protected) {
+    delBtn = null
+  }
 
   return (
     <div className="song">
-      <i 
-        className="fas fa-times remove-section"
-        onClick={() => props.deleteSong(props.song.song_id)}></i>
+      {delBtn}
       <div className="title">
         <Link to={`/song/${props.song.song_id}`}>
           <h3>{props.song.title}</h3>

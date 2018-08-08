@@ -102,7 +102,7 @@ class Dashboard extends Component {
         <div className={`friends-panel ${friendsDisplay}`}>
           {friends}
           <i 
-            class="fa fa-times fa-3x open-friends-btn"
+            className="fa fa-times fa-3x open-friends-btn"
             onClick={this.toggleFriends}></i>
         </div>
         <div className={`songs-panel ${songsDisplay}`}>
@@ -116,7 +116,7 @@ class Dashboard extends Component {
           </form>
           {songs}
           <i 
-            class="fa fa-user-friends fa-3x open-friends-btn"
+            className="fa fa-user-friends fa-3x open-friends-btn"
             onClick={this.toggleFriends}></i>
         </div>
       </div>

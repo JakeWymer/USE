@@ -4,6 +4,7 @@ import Loading from 'react-loading-components';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {cancelFriend} from '../../ducks/userReducer';
+import SongItem from '../SongItem/SongItem';
 import './Profile.css';
 
 class Profile extends Component{
@@ -17,7 +18,18 @@ class Profile extends Component{
     };
   }
   
-  async componentDidMount() {
+  componentDidMount() {
+    this.fetchProfile()
+  }
+  
+  componentDidUpdate(prevProps) {
+    if(prevProps !== this.props) {
+      this.setState({loading: true});
+      this.fetchProfile();
+    }
+  }
+
+  async fetchProfile() {
     let user = await axios.get(`/api/users/${this.props.match.params.user_id}`);
     let songs = await axios.get(`/api/songs/${this.props.match.params.user_id}`);
 
@@ -34,7 +46,6 @@ class Profile extends Component{
       isMe
     });
   }
-  
 
   render() {
     console.log(this.state.isMe);
@@ -49,14 +60,15 @@ class Profile extends Component{
     let editBtn = null;
 
     if(this.state.isMe) {
-      editBtn = <Link to={`/edit/${this.props.user.currentUser.user_id}`}><button>Edit Profile</button></Link>
+      editBtn = <Link to={`/edit/${this.props.user.currentUser.user_id}`} className="edit-link"><button className="edit-btn">Edit Profile</button></Link>
     }
 
     let songs = this.state.songs.map(song => {
       return(
-        <div key={song.song_id}>
-          <h3>{song.title}</h3>
-        </div>
+        <SongItem 
+          key={song.song_id} 
+          song={song}
+          protected/>
       );
     });
 

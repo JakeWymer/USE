@@ -8,6 +8,7 @@
 .profile-wrap {
     min-height: 80vh;
     display: flex;
+    flex-direction: column;
 }
 
 .user-panel {
@@ -27,4 +28,42 @@
 
 .song-panel {
     flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.edit-btn {
+    font-size: 14px;
+    padding: 8px;
+    background-color: var(--orange);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    margin-left: 5px;
+}
+
+.edit-link {
+    margin-right: auto;
+    padding-left: 20px;
+}
+
+.user-panel h2 {
+    font-size: 30px;
+    margin-top: 10px;
+}
+
+.user-panel p {
+    margin: 0 auto;
+    width: 300px;
+}
+
+@media(min-width: 768px) {
+    .profile-wrap {
+        flex-direction: row;
+    }
+
+    .song-panel {
+        padding: 70px 0px;
+    }
 }

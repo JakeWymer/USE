@@ -60,18 +60,27 @@ class EditProfile extends Component {
     }
 
     return (
-      <div>
+      <div className="edit-profile-wrap">
         <form onSubmit={this.updateProfile}>
-          <input 
-            type="text"
-            onChange={this.handleChange}
-            name="name"
-            value={this.state.name}/>
-          <input 
-            type="text"
-            onChange={this.handleChange}
-            name="bio"
-            value={this.state.bio}/>
+          <div className="form-group">
+            <label htmlFor="name">Name</label>
+            <input 
+              type="text"
+              onChange={this.handleChange}
+              name="name"
+              id="name"
+              value={this.state.name}/>
+          </div>
+          <div className="form-group">
+            <label htmlFor="bio">Bio</label>
+            <textarea 
+              rows="4" cols="50"
+              onChange={this.handleChange}
+              name="bio"
+              id="bio">
+              {this.state.bio}
+            </textarea>
+          </div>  
           <button type="submit">Save</button>
         </form>
       </div>

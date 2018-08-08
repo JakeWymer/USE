@@ -22,3 +22,15 @@
 i.orange {
     color: var(--orange);
 }
+
+.option-buttons > *, .friend > button{
+    font-size: 14px;
+    padding: 8px;
+    background-color: var(--orange);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    margin-left: 5px;
+    margin: 5px;
+}
+

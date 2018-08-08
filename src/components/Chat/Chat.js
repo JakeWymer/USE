@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import io from 'socket.io-client';
 import {connect} from 'react-redux';
 import axios from 'axios';
+import './Chat.css';
 
 class Chat extends Component {
   constructor(props) {
@@ -20,11 +21,9 @@ class Chat extends Component {
   async componentDidMount() {
     this.socket.emit("join", this.props.match.params.chat_id);
     let messages = await axios.get(`/api/messages/${this.props.match.params.chat_id}`);
-    console.log(messages);
     this.setState({messages: messages.data});
 
     this.socket.on('message-received', (data) => {
-      console.log(data);
       let m = this.state.messages;
       m.push(data);
       this.setState({messages: m});
@@ -54,22 +53,24 @@ class Chat extends Component {
   render() {
     let messages = this.state.messages.map((message, i) => {
       if(message.user_id !== this.props.user.currentUser.user_id){
-        return <h2 key={i} className="received-message">{message.body}</h2>
+        return <h2 key={i} className="received-message message">{message.body}</h2>
       } else {
-        return <h2 className="sent-message">{message.body}</h2>
+        return <h2 key={i} className="sent-message message">{message.body}</h2>
       }
     });
 
     return (
-      <div>
-        CHAT
-        {messages}
+      <div className="chat-wrap">
+        <div className="messages-wrap">
+          {messages}
+        </div>
         <form 
           onSubmit={this.sendMessage}>
           <input 
             type="text"
             onChange={this.handleChange}
             value={this.state.message}/>
+          <button type="submit">Send</button>
         </form>
       </div>
     );

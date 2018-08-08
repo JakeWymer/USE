@@ -62,7 +62,7 @@ const getUserById = (req, res) => {
 }
 
 const editUser = (req, res) => {
-  req.app.get('db').users.edit_user(req.body.name, req.body.bio, req.params.user_id)
+  req.app.get('db').users.edit_user(req.body.name, req.body.bio, req.body.profilePicUrl, req.params.user_id)
     .then(() => res.sendStatus(200))
     .catch(err => res.send(err));
 }

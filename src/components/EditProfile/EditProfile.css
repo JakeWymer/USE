@@ -16,6 +16,10 @@
     flex-direction: column;
 }
 
+.edit-profile-wrap div img {
+    width: 300px;
+}
+
 .edit-profile-wrap input, .edit-profile-wrap textarea {
     border: 1px solid #d6d6d6;
     border-radius: 5px;

@@ -16,6 +16,7 @@
 
 .accordion__title {
     box-sizing: border-box;
+    padding: 35px;
 }
 
 .accordion__body {
@@ -36,4 +37,8 @@
 
 #accordion__body-1 input{
     width: 100%;
+}
+
+input[type=file] {
+    border: none;
 }

@@ -35,3 +35,7 @@
     color: white;
     margin-left: 5px;
 }
+
+input[type=file] {
+    border: none;
+}

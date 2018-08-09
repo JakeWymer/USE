@@ -6,7 +6,6 @@ import store from './store';
 
 import './index.css';
 import App from './App';
-import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(
   <Provider store={store}>
@@ -15,4 +14,3 @@ ReactDOM.render(
     </HashRouter>
   </Provider>
 , document.getElementById('root'));
-registerServiceWorker();

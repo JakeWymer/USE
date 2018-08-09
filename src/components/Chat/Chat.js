@@ -15,7 +15,7 @@ class Chat extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
 
-    this.socket = io('http://localhost:5000');
+    this.socket = io(process.env.REACT_APP_SOCKET_URL);
   }
   
   async componentDidMount() {

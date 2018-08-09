@@ -21,6 +21,8 @@ const strategy = require(`${__dirname}/strategy.js`);
 
 const port = process.env.PORT || 5000;
 
+app.use( express.static( `${__dirname}/../build` ) );
+
 massive(process.env.POSTGRES_URI)
   .then(db => {
     app.set('db', db);
@@ -95,6 +97,11 @@ app.get('/api/sections/:section_id', sectionController.getSectionById);
 app.put('/api/sections/:section_id', sectionController.updateSection);
 
 app.get('/api/words/:word', dictionaryController.search);
+
+const path = require('path')
+app.get('*', (req, res)=>{
+  res.sendFile(path.join(__dirname, '../build/index.html'));
+})
 
 http.listen(port, () => {
   console.log(`Listening on port: ${port}`);

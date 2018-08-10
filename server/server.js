@@ -98,10 +98,10 @@ app.put('/api/sections/:section_id', sectionController.updateSection);
 
 app.get('/api/words/:word', dictionaryController.search);
 
-const path = require('path')
+const path = require('path');
 app.get('*', (req, res)=>{
   res.sendFile(path.join(__dirname, '../build/index.html'));
-})
+});
 
 http.listen(port, () => {
   console.log(`Listening on port: ${port}`);

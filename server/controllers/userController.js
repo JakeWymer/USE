@@ -1,13 +1,13 @@
 const passport = require('passport');
 
 const login = passport.authenticate('auth0', { 
-  successRedirect: 'http://localhost:3000/#/dashboard', 
-  failureRedirect: 'http://localhost:3000/#/', connection: 'google-oauth2'
+  successRedirect: process.env.REACT_APP_AUTH_SUCCESS + '/#/dashboard', 
+  failureRedirect: process.env.REACT_APP_AUTH_LOGOUT + '/#/', connection: 'google-oauth2'
 });
 
 const logout = (req, res) => {
   req.session.destroy(() => {
-    res.redirect('http://localhost:3000/#/');
+    res.redirect(process.env.REACT_APP_AUTH_LOGOUT + "/#/");
   });
 };
 

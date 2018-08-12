@@ -207,7 +207,7 @@ class SongDetail extends Component {
             class="fa fa-times fa-3x open-friends-btn"
             onClick={this.toggleFriends}></i>
         </div>
-        <div className={`song-panel ${songsDisplay}`}>
+        <div className={`s-panel ${songsDisplay}`}>
           {actionBtn}
           {songInfo}
           <form onSubmit={this.handleSubmit}>

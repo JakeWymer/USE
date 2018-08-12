@@ -175,7 +175,7 @@ class SectionDetail extends Component {
             name={e.dom_id}
             onChange={this.handleLyrics}
           />
-          <button onClick={() => this.removeInput(e.id)}>X</button>
+          <button onClick={() => this.removeInput(e.id)}>Remove</button>
         </div>
       )
     });
@@ -196,7 +196,7 @@ class SectionDetail extends Component {
     let def = null;
 
     if(this.state.word.defs) {
-      def = this.state.word.defs[0];
+      def = this.state.word.defs[0].slice(2);
     }
 
     let rhymes = this.state.rhymes.map((rhyme, i) => {
@@ -279,8 +279,8 @@ class SectionDetail extends Component {
                 onChange={this.handleChange}
                 value={this.state.dictionaryInput}/>   
           </form>
-          {this.state.word.word}
-          {def}
+          <h2>{this.state.word.word}</h2>
+          <p>{def}</p>
           <Accordion>
             <AccordionItem>
                 <AccordionItemTitle>

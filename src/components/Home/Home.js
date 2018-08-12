@@ -7,11 +7,11 @@ const Home = props => {
   return (
     <div>
       <section id="hero">
-        <h1>U.S.E</h1>
+        <h1>U.S.E.</h1>
         <h2>Ultimate Songwriting Experience</h2>
         <button className="sign-up-btn"><a href={process.env.REACT_APP_LOGIN_URL}>Sign Up</a></button>
         <img src={musicImage} alt=""/>
-      </section>
+      </section>  
       <section id="features">
         <div className="feature-item">
           <i className="fas fa-user-friends fa-5x"></i>

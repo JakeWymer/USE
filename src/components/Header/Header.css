@@ -16,19 +16,45 @@ header {
 }
 
 nav {
+    z-index: 2;
+    position: absolute;
+    top: 10vh;
+    width: 80%;
     justify-content: center;
-    display: none;
-    white-space:nowrap;
+    white-space: nowrap;
+    background-color: var(--dark-blue);
+    flex-direction: column;
+    border-radius: 0px 0px 5px 5px;
 }
 
 nav > * {
     margin: 0 10%;
+    margin-bottom: 15px;
+}
+
+.show-menu {
+    display: flex;
+}
+
+.hide-menu {
+    display: none;
 }
 
 input {
     font-size: 20px;
     border-radius: 5px;
     border: none;
+}
+
+.menu-btn {
+    position: absolute;
+    right: 9%;
+}
+
+@media(min-width: 360px) {
+    .menu-btn {
+        right: 15%;
+    }
 }
 
 @media(min-width: 768px) {
@@ -38,9 +64,25 @@ input {
 
     nav {
         display: flex;
+        flex-direction: row;
+        position: relative;
+        top: 0;
+        width: 20%;
+    }
+
+    nav > * {
+        margin-bottom: 0;
     }
 
     .logo {
         display: block;
+    }
+
+    .menu-btn {
+        display: none;
+    }
+
+    .hide-menu {
+        display: flex;
     }
 }

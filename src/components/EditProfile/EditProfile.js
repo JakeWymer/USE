@@ -103,7 +103,7 @@ class EditProfile extends Component {
         <form onSubmit={this.uploadToFirebase}>
           <div>
             <img src={this.state.profilePicUrl} alt=""/>
-            <input type="file" name="profilePic" onChange={this.compressFile}/>
+            <input type="file" name="profilePic" onChange={this.compressFile} className="profile-upload"/>
           </div>
           <div className="form-group">
             <label htmlFor="name">Name</label>

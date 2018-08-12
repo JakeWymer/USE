@@ -24,10 +24,12 @@ class Header extends Component {
     let headerContent = null;
     let input = null;
     let show = this.state.toggleMenu ? 'show-menu' : 'hide-menu';
+    let dashToMenu = this.state.toggleMenu ? 'show-dash' : 'hide-dash';
 
     if(this.props.user.currentUser.user_id) {
       headerContent = (
         <nav className={`${show}`}>
+          <Link to="/dashboard"><p className={`${dashToMenu}`}>Dashboard</p></Link>
           <Link to={`/profile/${this.props.user.currentUser.user_id}`}><p>Profile</p></Link>
           <a onClick={() => this.props.setCurrentUser(false)} href={process.env.REACT_APP_LOGOUT_URL}>Log Out</a>
         </nav>

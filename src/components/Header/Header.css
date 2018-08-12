@@ -51,6 +51,14 @@ input {
     right: 9%;
 }
 
+.show-dash {
+    display: block;
+}
+
+.hide-dash {
+    display: none;
+}
+
 @media(min-width: 360px) {
     .menu-btn {
         right: 15%;

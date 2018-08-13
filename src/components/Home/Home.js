@@ -17,21 +17,21 @@ const Home = props => {
           <i className="fas fa-user-friends fa-5x"></i>
           <h3>Collaborate</h3>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio quas consectetur cupiditate animi corrupti maiores ullam, sunt quod porro obcaecati beatae debitis tempora nemo nobis at reiciendis vero iste voluptate.
+            Find like-minded people to work on projects together. Chat with friends and invite them to contribute to your music.
           </p>
         </div>
         <div className="feature-item">
           <i className="fas fa-music fa-5x"></i>
           <h3>Create</h3>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio quas consectetur cupiditate animi corrupti maiores ullam, sunt quod porro obcaecati beatae debitis tempora nemo nobis at reiciendis vero iste voluptate.
+            From idea to music to lyrics—create and share the music that influences our world. Upload your demos and let your song be heard.
           </p>
         </div>
         <div className="feature-item">
           <i className="fas fa-lightbulb fa-5x"></i>
           <h3>Inspire</h3>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio quas consectetur cupiditate animi corrupti maiores ullam, sunt quod porro obcaecati beatae debitis tempora nemo nobis at reiciendis vero iste voluptate.
+            Share and promote the growth of creative expression. See what songs friends are working on, share your ideas, invite feedback.
           </p>
         </div>
       </section>

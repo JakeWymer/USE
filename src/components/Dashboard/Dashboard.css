@@ -1,6 +1,6 @@
 .dashboard {
     display: flex;
-    min-height: 80vh;
+    min-height: 90vh;
 }
 
 .friends-panel {

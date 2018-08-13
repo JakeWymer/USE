@@ -144,22 +144,28 @@ class SongDetail extends Component {
     if(this.state.editing) {
       songInfo = (
         <div className="song-info">
+          <label htmlFor="titleEdit">Title</label>
           <input 
             type="text" 
             value={this.state.titleEdit}
             onChange={this.handleChange}
-            name="titleEdit"/>
+            name="titleEdit"
+            id="titleEdit"/>
           <div className="song-meta">
+          <label htmlFor="keyEdit">Key</label>
             <input 
               type="text" 
               value={this.state.keyEdit}
               onChange={this.handleChange}
-              name="keyEdit"/>
+              name="keyEdit"
+              id="keyEdit"/>
+            <label htmlFor="bpmEdit">BPM</label>            
             <input 
               type="text" 
               value={this.state.bpmEdit}
               onChange={this.handleChange}
-              name="bpmEdit"/>
+              name="bpmEdit"
+              id="bpmEdit"/>
           </div>
         </div>
       );
